@@ -81,7 +81,7 @@ export default function Hero() {
           {[
             { value: "2 pays", label: "couverts" },
             { value: "100%", label: "gratuit" },
-            { value: "∞", label: "événements" },
+            { value: "+500", label: "événements" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-2xl sm:text-3xl font-bold rainbow-text">{stat.value}</div>
