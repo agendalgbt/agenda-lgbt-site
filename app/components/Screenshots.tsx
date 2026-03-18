@@ -52,7 +52,7 @@ export default function Screenshots() {
         </div>
 
         {/* Screenshots */}
-        <div className="flex flex-col sm:flex-row items-end justify-center gap-4 lg:gap-8">
+        <div className="flex flex-col sm:flex-row items-center sm:items-end justify-center gap-4 lg:gap-8">
           {screens.map((screen, idx) => (
             <div
               key={screen.title}
@@ -64,7 +64,7 @@ export default function Screenshots() {
               <img
                 src={screen.src}
                 alt={screen.label}
-                className="w-[220px] sm:w-[200px] lg:w-[240px] drop-shadow-2xl"
+                className="w-[280px] sm:w-[240px] lg:w-[290px] drop-shadow-2xl"
               />
               <p className="text-white/40 text-xs mt-4 text-center">{screen.label}</p>
             </div>
