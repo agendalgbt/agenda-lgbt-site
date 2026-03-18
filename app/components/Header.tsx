@@ -23,7 +23,11 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2 group">
-          <img src="/logo.png" alt="Agenda LGBT" className="w-8 h-8 rounded-xl object-contain bg-white" />
+          <img
+            src="/logo.png"
+            alt="Agenda LGBT"
+            className="w-8 h-8 rounded-xl object-contain bg-white group-hover:scale-110 transition-transform shadow-lg"
+          />
           <span className="font-bold text-lg tracking-tight">
             <span className="rainbow-text">Agenda</span>
             <span className="text-white ml-1">LGBT</span>
@@ -61,21 +65,9 @@ export default function Header() {
           aria-label="Menu"
         >
           <div className="w-5 flex flex-col gap-1">
-            <span
-              className={`block h-0.5 bg-current transition-all duration-300 ${
-                menuOpen ? "rotate-45 translate-y-1.5" : ""
-              }`}
-            />
-            <span
-              className={`block h-0.5 bg-current transition-all duration-300 ${
-                menuOpen ? "opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`block h-0.5 bg-current transition-all duration-300 ${
-                menuOpen ? "-rotate-45 -translate-y-1.5" : ""
-              }`}
-            />
+            <span className={`block h-0.5 bg-current transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-1.5" : ""}`} />
+            <span className={`block h-0.5 bg-current transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+            <span className={`block h-0.5 bg-current transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
           </div>
         </button>
       </div>
