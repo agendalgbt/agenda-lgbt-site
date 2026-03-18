@@ -1,7 +1,6 @@
 export default function Footer() {
   return (
     <footer id="contact" className="relative border-t border-white/5 pt-16 pb-8 px-4 sm:px-6">
-      {/* Rainbow line top */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
 
       <div className="max-w-6xl mx-auto">
@@ -9,7 +8,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <img src="/logo.png" alt="Agenda LGBT" className="w-8 h-8 rounded-xl object-contain bg-white" />
+              <img
+                src="/logo.png"
+                alt="Agenda LGBT"
+                className="w-8 h-8 rounded-xl object-contain bg-white shadow-lg"
+              />
               <span className="font-bold text-lg">
                 <span className="rainbow-text">Agenda</span>
                 <span className="text-white ml-1">LGBT</span>
@@ -30,7 +33,7 @@ export default function Footer() {
                 { label: "Accueil", href: "#" },
                 { label: "L'application", href: "#app" },
                 { label: "Pays couverts", href: "#pays" },
-                { label: "Nous contacter", href: "mailto:contact@agendalgbt.fr" },
+                { label: "Nous contacter", href: "mailto:hello@agendalgbt.com" },
               ].map((link) => (
                 <a
                   key={link.label}
@@ -43,13 +46,12 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Social & Download */}
+          {/* Social */}
           <div>
             <h4 className="text-white/60 text-xs uppercase tracking-widest mb-4">
               Suivre Agenda LGBT
             </h4>
             <div className="flex gap-3 mb-6">
-              {/* Instagram */}
               <a
                 href="https://www.instagram.com/agenda_lgbt/"
                 target="_blank"
@@ -81,12 +83,8 @@ export default function Footer() {
             © 2026 Agenda LGBT. Tous droits réservés. Fait avec 🏳️‍🌈 pour la communauté.
           </p>
           <div className="flex gap-4">
-            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors">
-              Mentions légales
-            </a>
-            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors">
-              Confidentialité
-            </a>
+            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors">Mentions légales</a>
+            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors">Confidentialité</a>
           </div>
         </div>
       </div>
