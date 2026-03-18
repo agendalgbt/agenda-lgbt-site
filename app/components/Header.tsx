@@ -23,9 +23,7 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 via-blue-500 to-green-400 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-            <span className="text-white font-bold text-sm">A</span>
-          </div>
+          <img src="/logo.png" alt="Agenda LGBT" className="w-8 h-8 rounded-xl object-contain bg-white" />
           <span className="font-bold text-lg tracking-tight">
             <span className="rainbow-text">Agenda</span>
             <span className="text-white ml-1">LGBT</span>
