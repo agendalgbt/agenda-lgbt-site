@@ -11,7 +11,7 @@ export default function Footer() {
               <img
                 src="/logo.png"
                 alt="Agenda LGBT"
-                className="w-8 h-8 rounded-xl object-contain bg-white shadow-lg"
+                className="w-8 h-8 rounded-md object-contain bg-white shadow-lg"
               />
               <span className="font-bold text-lg">
                 <span className="rainbow-text">Agenda</span>
