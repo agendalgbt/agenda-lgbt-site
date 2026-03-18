@@ -83,9 +83,9 @@ export default function Footer() {
             © 2026 Agenda LGBT. Tous droits réservés. Fait avec 🏳️‍🌈 pour la communauté.
           </p>
           <div className="flex gap-4">
-            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors">Mentions légales</a>
-            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors">Confidentialité</a>
-          </div>
+  <a href="https://foamy-hygienic-7f7.notion.site/INFORMATIONS-L-GALES-POLITIQUE-DE-CONFIDENTIALIT-3020bca09cae80f5a1b2faae1aef60f1" target="_blank" rel="noopener noreferrer" className="text-white/25 hover:text-white/50 text-xs transition-colors">Mentions légales et politique de confidentialité</a>
+</div>
+
         </div>
       </div>
     </footer>
