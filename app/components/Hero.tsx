@@ -66,7 +66,7 @@ export default function Hero() {
         >
           {/* App Store */}
           <a
-            href="#"
+            href="https://apps.apple.com/us/app/agenda-lgbt/id6758344938"
             className="group flex items-center gap-3 bg-white text-black px-6 py-3.5 rounded-2xl font-semibold hover:bg-white/90 transition-all hover:scale-105 shadow-xl shadow-white/10 min-w-[200px]"
           >
             <svg
@@ -86,7 +86,7 @@ export default function Hero() {
 
           {/* Google Play */}
           <a
-            href="#"
+            href="https://play.google.com/store/apps/details?id=com.pridepulse.agendalgbtapp&hl=fr"
             className="group flex items-center gap-3 bg-white text-black px-6 py-3.5 rounded-2xl font-semibold hover:bg-white/90 transition-all hover:scale-105 shadow-xl shadow-white/10 min-w-[200px]"
           >
             <svg viewBox="0 0 24 24" className="w-7 h-7 flex-shrink-0">
