@@ -43,8 +43,8 @@ export default function Hero() {
 
         {/* Subtitle */}
         <p className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
-          L'application communautaire qui réunit toute l'actualité LGBT+ — soirées,
-          marches des fiertés, expos, concerts — en un seul endroit.
+          L'application communautaire qui rythme tes nuits et tes journées. Retrouve les meilleures soirées LGBT+, mais aussi les bars, saunas, et expos, réunis en un seul endroit.
+
         </p>
 
         {/* CTA Buttons */}
