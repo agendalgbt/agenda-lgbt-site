@@ -53,7 +53,7 @@ export default function Footer() {
             <div className="flex gap-3 mb-6">
               {/* Instagram */}
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/agenda_lgbt/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all group"
@@ -64,20 +64,7 @@ export default function Footer() {
                 </svg>
               </a>
 
-              {/* TikTok */}
-              <a
-                href="https://tiktok.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all"
-                aria-label="TikTok"
-              >
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z" />
-                </svg>
-              </a>
-            </div>
-
+      
             <a
               href="mailto:contact@agendalgbt.fr"
               className="text-white/40 hover:text-white/80 text-sm transition-colors flex items-center gap-2"
