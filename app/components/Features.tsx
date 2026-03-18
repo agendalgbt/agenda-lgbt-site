@@ -14,7 +14,7 @@ const features = [
     glow: "shadow-rose-500/20",
     title: "Près de chez toi",
     description:
-      "Trouve instantanément les événements LGBT+ dans ta ville ou ta région. Géolocalisation intelligente pour ne rien manquer.",
+      "Trouve instantanément les meilleures soirées et événements LGBT+ près de chez toi. Notre géolocalisation intelligente t'assure de ne jamais rater la fête, ni les autres sorties de ta région.",
   },
   {
     icon: (
@@ -26,7 +26,7 @@ const features = [
     glow: "shadow-blue-500/20",
     title: "France & Belgique",
     description:
-      "Couvre toute la France et la Belgique dès maintenant, avec l'Espagne et l'Allemagne qui arrivent très bientôt.",
+      "Explore la scène nocturne et culturelle de toute la France et de la Belgique. L'Espagne et l'Allemagne rejoindront la fête très bientôt pour repousser les frontières !",
   },
   {
     icon: (
@@ -38,7 +38,7 @@ const features = [
     glow: "shadow-green-500/20",
     title: "Gratuit & communautaire",
     description:
-      "Une application 100% gratuite, construite avec et pour la communauté LGBT+. Soumets tes événements facilement.",
+      "Une application 100% gratuite, pensée par et pour la communauté LGBT+. Et la meilleure nouvelle ? Elle le restera pour toujours ! Accède à tout l'agenda des soirées et des événements sans jamais débourser un centime.",
   },
   {
     icon: (
@@ -50,19 +50,19 @@ const features = [
     glow: "shadow-yellow-500/20",
     title: "Agenda complet",
     description:
-      "Concerts, soirées, marches des fiertés, expositions, ateliers… Tous les types d'événements en un seul endroit.",
+      "Clubbing, soirées thématiques, mais aussi concerts, Prides, expos ou ateliers... La nuit t'appartient, et toute la diversité de la culture LGBT+ est réunie au même endroit.",
   },
   {
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-7 h-7">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
       </svg>
     ),
     gradient: "from-pink-500 to-rose-400",
     glow: "shadow-pink-500/20",
-    title: "Alertes personnalisées",
+    title: "Tes favoris à portée de main",
     description:
-      "Ne rate plus aucun événement. Active les notifications pour tes villes favorites et tes types d'événements préférés.",
+      "Repère les soirées ou les événements qui te font de l'œil et ajoute-les directement à tes favoris. Crée ton propre programme sur mesure pour retrouver facilement toutes tes prochaines sorties !",
   },
   {
     icon: (
@@ -74,7 +74,7 @@ const features = [
     glow: "shadow-violet-500/20",
     title: "Événements mis en avant",
     description:
-      "Découvre chaque semaine les incontournables : prides nationales, grands festivals, soirées cultes à ne pas manquer.",
+      "Découvre chaque semaine notre sélection des soirées cultes et des clubs à ne pas rater, ainsi que les grands festivals et Prides nationales incontournables.",
   },
 ];
 
@@ -103,7 +103,6 @@ export default function Features() {
   return (
     <section id="app" ref={sectionRef} className="py-24 sm:py-32 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
-        {/* Section header */}
         <div className="text-center mb-16 animate-on-scroll">
           <div className="inline-block glass rounded-full px-4 py-1.5 text-xs text-white/50 mb-4 uppercase tracking-widest">
             Fonctionnalités
@@ -117,7 +116,6 @@ export default function Features() {
           </p>
         </div>
 
-        {/* Cards grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((feature, i) => (
             <div
@@ -125,19 +123,13 @@ export default function Features() {
               className="animate-on-scroll glass rounded-2xl p-6 hover:bg-white/[0.06] transition-all duration-300 group cursor-default"
               style={{ transitionDelay: `${i * 60}ms` }}
             >
-              {/* Icon */}
               <div
                 className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-5 shadow-lg ${feature.glow} group-hover:scale-110 transition-transform`}
               >
                 <span className="text-white">{feature.icon}</span>
               </div>
-
-              <h3 className="text-white font-semibold text-lg mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-white/40 text-sm leading-relaxed">
-                {feature.description}
-              </p>
+              <h3 className="text-white font-semibold text-lg mb-2">{feature.title}</h3>
+              <p className="text-white/40 text-sm leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
