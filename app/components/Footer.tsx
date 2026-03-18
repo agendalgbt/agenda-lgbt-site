@@ -9,9 +9,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 via-blue-500 to-green-400 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
-              </div>
+              <img src="/logo.png" alt="Agenda LGBT" className="w-8 h-8 rounded-xl object-contain bg-white" />
               <span className="font-bold text-lg">
                 <span className="rainbow-text">Agenda</span>
                 <span className="text-white ml-1">LGBT</span>
