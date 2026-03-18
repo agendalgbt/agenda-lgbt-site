@@ -51,7 +51,7 @@ export default function Header() {
             </a>
           ))}
           <a
-            href="#download"
+            href="#"
             className="bg-gradient-to-r from-violet-600 to-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-all hover:scale-105 shadow-lg shadow-violet-500/20"
           >
             Télécharger
@@ -90,7 +90,7 @@ export default function Header() {
             </a>
           ))}
           <a
-            href="#download"
+            href="#"
             onClick={() => setMenuOpen(false)}
             className="bg-gradient-to-r from-violet-600 to-blue-500 text-white px-4 py-3 rounded-full text-sm font-semibold text-center"
           >
