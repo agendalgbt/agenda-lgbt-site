@@ -11,6 +11,52 @@ import { useRouter } from "next/navigation";
 
 type Platform = "clubbing" | "other" | null;
 
+type InstaStatus =
+  | { ok: true; message: string }
+  | { ok: false; warning: string }
+  | null;
+
+function getInstaPublicationStatus(eventDateStr: string): InstaStatus {
+  if (!eventDateStr) return null;
+
+  const eventDate = new Date(eventDateStr);
+  const now = new Date();
+  const todayMidnight = new Date(now);
+  todayMidnight.setHours(0, 0, 0, 0);
+
+  // Trouver le mardi de la semaine de l'événement (mardi <= date event)
+  const eventDay = eventDate.getDay(); // 0=dim, 1=lun, 2=mar...
+  const daysSinceTuesday = (eventDay - 2 + 7) % 7;
+  const targetTuesday = new Date(eventDate);
+  targetTuesday.setDate(eventDate.getDate() - daysSinceTuesday);
+  targetTuesday.setHours(0, 0, 0, 0);
+
+  const isTargetToday = targetTuesday.getTime() === todayMidnight.getTime();
+  const isTargetFuture = targetTuesday > todayMidnight;
+  const currentHour = now.getHours();
+
+  const formattedTarget = targetTuesday.toLocaleDateString("fr-FR", {
+    weekday: "long", day: "numeric", month: "long",
+  });
+
+  if (isTargetFuture) {
+    return {
+      ok: true,
+      message: `📸 Si validé, votre événement sera publié sur Instagram le ${formattedTarget}.`,
+    };
+  } else if (isTargetToday && currentHour < 10) {
+    return {
+      ok: true,
+      message: `📸 Si validé, votre événement sera publié sur Instagram ce soir à 18h.`,
+    };
+  } else {
+    return {
+      ok: false,
+      warning: `⚠️ Il est trop tard pour publier cet événement sur Instagram, mais il sera bien visible sur l'application.`,
+    };
+  }
+}
+
 const otherCategories = [
   "Bar", "Restaurant", "Drag", "Cruising", "Sauna", "Culture/Spectacle",
 ];
@@ -298,6 +344,21 @@ export default function SoumettreEvenementPage() {
             {!isVenue && (
               <div className="glass rounded-2xl p-6 flex flex-col gap-4">
                 <h2 className="text-white/60 text-xs uppercase tracking-wider">Date & heure</h2>
+
+                {/* Message Instagram dynamique — clubbing uniquement */}
+                {platform === "clubbing" && form.date_debut && (() => {
+                  const status = getInstaPublicationStatus(form.date_debut);
+                  if (!status) return null;
+                  return status.ok ? (
+                    <div className="flex items-start gap-3 bg-pink-500/10 border border-pink-500/20 rounded-xl px-4 py-3">
+                      <span className="text-pink-400 text-sm leading-relaxed">{status.message}</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3">
+                      <span className="text-amber-400 text-sm leading-relaxed">{status.warning}</span>
+                    </div>
+                  );
+                })()}
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
