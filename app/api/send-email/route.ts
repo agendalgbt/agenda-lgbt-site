@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
               <p style="margin: 0 0 8px; color: rgba(255,255,255,0.6);"><strong>Organisateur :</strong> ${nom_organisation}</p>
               <p style="margin: 0; color: rgba(255,255,255,0.6);"><strong>Contact :</strong> ${contact_nom} — ${to}</p>
             </div>
-            <a href="https://dashboard-agendalgbt.streamlit.app"
+            <a href="https://agendalgbt.streamlit.app"
                style="background: linear-gradient(to right, #8b5cf6, #3b82f6); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block;">
               Voir dans le dashboard →
             </a>
