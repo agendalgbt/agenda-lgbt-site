@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "../context/AuthContext";
 import AuthGuard from "../components/AuthGuard";
@@ -34,11 +34,12 @@ export default function DashboardPage() {
       try {
         const q = query(
           collection(db, "submissions"),
-          where("organizer_id", "==", user.uid),
-          orderBy("created_at", "desc")
+          where("organizer_id", "==", user.uid)
         );
         const snap = await getDocs(q);
-        setSubmissions(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Submission)));
+        const list = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Submission));
+        list.sort((a, b) => (b.created_at?.seconds || 0) - (a.created_at?.seconds || 0));
+        setSubmissions(list);
       } catch (err) {
         console.error(err);
       } finally {
