@@ -56,6 +56,50 @@ export async function POST(req: NextRequest) {
           </p>
         </div>
       `;
+
+      // Envoi de la confirmation à l'organisateur
+      const { error: errorOrga } = await resend.emails.send({
+        from: "Agenda LGBT <hello@agendalgbt.com>",
+        to,
+        subject,
+        html,
+      });
+      if (errorOrga) {
+        console.error("Resend error (orga):", errorOrga);
+        return NextResponse.json({ error: errorOrga }, { status: 500 });
+      }
+
+      // Notification admin
+      const { error: errorAdmin } = await resend.emails.send({
+        from: "Agenda LGBT <hello@agendalgbt.com>",
+        to: "hello@agendalgbt.com",
+        subject: `📬 Nouvelle soumission : "${titre}" — ${nom_organisation}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0a0a0f; color: white; padding: 40px; border-radius: 16px;">
+            <h1 style="color: #8b5cf6; margin-bottom: 8px;">Nouvelle soumission 📬</h1>
+            <p style="color: rgba(255,255,255,0.6); margin-bottom: 24px;">
+              Un organisateur vient de soumettre un événement.
+            </p>
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+              <p style="margin: 0 0 8px; color: white;"><strong>Événement :</strong> ${titre}</p>
+              <p style="margin: 0 0 8px; color: rgba(255,255,255,0.6);"><strong>Organisateur :</strong> ${nom_organisation}</p>
+              <p style="margin: 0; color: rgba(255,255,255,0.6);"><strong>Contact :</strong> ${contact_nom} — ${to}</p>
+            </div>
+            <a href="https://dashboard-agendalgbt.streamlit.app"
+               style="background: linear-gradient(to right, #8b5cf6, #3b82f6); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block;">
+              Voir dans le dashboard →
+            </a>
+            <p style="color: rgba(255,255,255,0.3); margin-top: 40px; font-size: 12px;">
+              Agenda LGBT Pro — notification automatique
+            </p>
+          </div>
+        `,
+      });
+      if (errorAdmin) {
+        console.error("Resend error (admin):", errorAdmin);
+      }
+
+      return NextResponse.json({ success: true });
     } else if (type === "approved") {
       subject = `🎉 Votre événement "${titre}" est en ligne !`;
       html = `
