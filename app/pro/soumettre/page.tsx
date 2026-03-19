@@ -360,50 +360,53 @@ export default function SoumettreEvenementPage() {
                   );
                 })()}
 
-                {/* Début */}
-                <div>
-                  <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Début *</label>
-                  <div className="flex gap-2">
-                    <input
-                      type="date"
-                      name="date_debut"
-                      required
-                      value={form.date_debut}
-                      onChange={handleChange}
-                      style={{ colorScheme: "dark" }}
-                      className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-violet-500/50 transition-colors text-sm"
-                    />
-                    <input
-                      type="time"
-                      name="heure_debut"
-                      value={form.heure_debut}
-                      onChange={handleChange}
-                      style={{ colorScheme: "dark" }}
-                      className="w-28 shrink-0 bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-violet-500/50 transition-colors text-sm"
-                    />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Début */}
+                  <div>
+                    <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Début *</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="date"
+                        name="date_debut"
+                        required
+                        value={form.date_debut}
+                        onChange={handleChange}
+                        style={{ colorScheme: "dark" }}
+                        className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-violet-500/50 transition-colors text-sm"
+                      />
+                      <input
+                        type="time"
+                        name="heure_debut"
+                        value={form.heure_debut}
+                        onChange={handleChange}
+                        style={{ colorScheme: "dark" }}
+                        className="w-24 shrink-0 bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-violet-500/50 transition-colors text-sm"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {/* Fin */}
-                <div>
-                  <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Fin <span className="normal-case text-white/30">(optionnel)</span></label>
-                  <div className="flex gap-2">
-                    <input
-                      type="date"
-                      name="date_fin"
-                      value={form.date_fin}
-                      onChange={handleChange}
-                      style={{ colorScheme: "dark" }}
-                      className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-violet-500/50 transition-colors text-sm"
-                    />
-                    <input
-                      type="time"
-                      name="heure_fin"
-                      value={form.heure_fin}
-                      onChange={handleChange}
-                      style={{ colorScheme: "dark" }}
-                      className="w-28 shrink-0 bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-violet-500/50 transition-colors text-sm"
-                    />
+                  {/* Fin */}
+                  <div>
+                    <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Fin *</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="date"
+                        name="date_fin"
+                        required
+                        value={form.date_fin}
+                        onChange={handleChange}
+                        style={{ colorScheme: "dark" }}
+                        className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-violet-500/50 transition-colors text-sm"
+                      />
+                      <input
+                        type="time"
+                        name="heure_fin"
+                        value={form.heure_fin}
+                        onChange={handleChange}
+                        style={{ colorScheme: "dark" }}
+                        className="w-24 shrink-0 bg-white/5 border border-white/10 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-violet-500/50 transition-colors text-sm"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
