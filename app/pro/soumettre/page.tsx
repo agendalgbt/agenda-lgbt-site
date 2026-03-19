@@ -12,8 +12,12 @@ import { useRouter } from "next/navigation";
 type Platform = "clubbing" | "other" | null;
 
 const otherCategories = [
-  "Bar", "Restaurant", "Drag", "Cruising", "Sauna", "Culture",
+  "Bar", "Restaurant", "Drag", "Cruising", "Sauna", "Culture/Spectacle",
 ];
+
+// Catégories "lieu" : formulaire simplifié sans dates
+const isVenueCategory = (cat: string) =>
+  ["Bar", "Restaurant", "Cruising", "Sauna"].includes(cat);
 
 export default function SoumettreEvenementPage() {
   const { user, organizer } = useAuth();
@@ -36,6 +40,7 @@ export default function SoumettreEvenementPage() {
     heure_fin: "",
     lieu_nom: "",
     adresse: "",
+    code_postal: "",
     ville: organizer?.ville || "",
     pays: "France",
     lien_billetterie: "",
@@ -71,9 +76,13 @@ export default function SoumettreEvenementPage() {
 
       const categorie = platform === "clubbing" ? "Clubbing" : selectedOtherCategory;
       const publish_instagram = platform === "clubbing";
+      const isVenue = platform === "other" && isVenueCategory(selectedOtherCategory);
 
-      const docRef = await addDoc(collection(db, "submissions"), {
+      // Pour les catégories "lieu", le titre = nom du lieu
+      const submitData = {
         ...form,
+        // Pour lieu : on copie le titre dans lieu_nom si lieu_nom est vide
+        lieu_nom: isVenue ? form.titre : form.lieu_nom,
         categorie,
         publish_instagram,
         image_url,
@@ -83,7 +92,9 @@ export default function SoumettreEvenementPage() {
         contact_email: user.email,
         statut: "en_attente",
         created_at: serverTimestamp(),
-      });
+      };
+
+      const docRef = await addDoc(collection(db, "submissions"), submitData);
 
       await fetch("/api/send-email", {
         method: "POST",
@@ -93,7 +104,7 @@ export default function SoumettreEvenementPage() {
           to: user.email,
           nom_organisation: organizer.nom_organisation,
           contact_nom: organizer.contact_nom,
-          titre: form.titre,
+          titre: isVenue ? form.titre : form.titre,
           submission_id: docRef.id,
         }),
       });
@@ -110,7 +121,7 @@ export default function SoumettreEvenementPage() {
   const inputClass =
     "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-violet-500/50 transition-colors text-sm";
 
-  // Étape 1 — choix de la catégorie
+  // Étape 1 — choix de la catégorie principale
   if (!platform) {
     return (
       <AuthGuard>
@@ -140,7 +151,7 @@ export default function SoumettreEvenementPage() {
                     <span className="text-green-400">✓</span> Publié sur l'application
                   </div>
                   <div className="flex items-center gap-2 text-xs text-white/60">
-                    <span className="text-pink-400">✓</span> Proposé sur <span className="text-white">@agenda_lgbt</span>
+                    <span className="text-pink-400">✓</span> Publié sur <span className="text-white">@agenda_lgbt</span>
                   </div>
                 </div>
               </button>
@@ -210,6 +221,7 @@ export default function SoumettreEvenementPage() {
 
   // Étape 2 — formulaire
   const categorie = platform === "clubbing" ? "Clubbing" : selectedOtherCategory;
+  const isVenue = platform === "other" && isVenueCategory(selectedOtherCategory);
 
   return (
     <AuthGuard>
@@ -254,8 +266,18 @@ export default function SoumettreEvenementPage() {
               </div>
 
               <div>
-                <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Titre de l'événement *</label>
-                <input type="text" name="titre" required value={form.titre} onChange={handleChange} placeholder="Ex: Soirée Bears, Pride de Lyon..." className={inputClass} />
+                <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">
+                  {isVenue ? "Nom du lieu *" : "Titre de l'événement *"}
+                </label>
+                <input
+                  type="text"
+                  name="titre"
+                  required
+                  value={form.titre}
+                  onChange={handleChange}
+                  placeholder={isVenue ? "Ex: Le Marais Bar, Le Dépôt..." : "Ex: Soirée Bears, Pride de Lyon..."}
+                  className={inputClass}
+                />
               </div>
 
               <div>
@@ -265,55 +287,64 @@ export default function SoumettreEvenementPage() {
                   required
                   value={form.description}
                   onChange={handleChange}
-                  placeholder="Décrivez votre événement..."
+                  placeholder={isVenue ? "Décrivez le lieu..." : "Décrivez votre événement..."}
                   rows={4}
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:border-violet-500/50 transition-colors text-sm resize-none"
                 />
               </div>
             </div>
 
-            {/* Date & heure */}
-            <div className="glass rounded-2xl p-6 flex flex-col gap-4">
-              <h2 className="text-white/60 text-xs uppercase tracking-wider">Date & heure</h2>
+            {/* Date & heure — uniquement pour événements (pas pour lieu) */}
+            {!isVenue && (
+              <div className="glass rounded-2xl p-6 flex flex-col gap-4">
+                <h2 className="text-white/60 text-xs uppercase tracking-wider">Date & heure</h2>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Date de début *</label>
-                  <input type="date" name="date_debut" required value={form.date_debut} onChange={handleChange} className={inputClass} />
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Date de début *</label>
+                    <input type="date" name="date_debut" required value={form.date_debut} onChange={handleChange} className={inputClass} />
+                  </div>
+                  <div>
+                    <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Heure de début</label>
+                    <input type="time" name="heure_debut" value={form.heure_debut} onChange={handleChange} className={inputClass} />
+                  </div>
                 </div>
-                <div>
-                  <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Heure de début</label>
-                  <input type="time" name="heure_debut" value={form.heure_debut} onChange={handleChange} className={inputClass} />
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Date de fin</label>
+                    <input type="date" name="date_fin" value={form.date_fin} onChange={handleChange} className={inputClass} />
+                  </div>
+                  <div>
+                    <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Heure de fin</label>
+                    <input type="time" name="heure_fin" value={form.heure_fin} onChange={handleChange} className={inputClass} />
+                  </div>
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Date de fin</label>
-                  <input type="date" name="date_fin" value={form.date_fin} onChange={handleChange} className={inputClass} />
-                </div>
-                <div>
-                  <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Heure de fin</label>
-                  <input type="time" name="heure_fin" value={form.heure_fin} onChange={handleChange} className={inputClass} />
-                </div>
-              </div>
-            </div>
+            )}
 
             {/* Lieu */}
             <div className="glass rounded-2xl p-6 flex flex-col gap-4">
               <h2 className="text-white/60 text-xs uppercase tracking-wider">Lieu</h2>
 
-              <div>
-                <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Nom du lieu *</label>
-                <input type="text" name="lieu_nom" required value={form.lieu_nom} onChange={handleChange} placeholder="Ex: Le Marais Club, Parc de la Tête d'Or..." className={inputClass} />
-              </div>
+              {/* Nom du lieu uniquement pour les événements (pas pour "lieu" car déjà en titre) */}
+              {!isVenue && (
+                <div>
+                  <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Nom du lieu *</label>
+                  <input type="text" name="lieu_nom" required value={form.lieu_nom} onChange={handleChange} placeholder="Ex: Le Marais Club, Parc de la Tête d'Or..." className={inputClass} />
+                </div>
+              )}
 
               <div>
                 <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Adresse</label>
                 <input type="text" name="adresse" value={form.adresse} onChange={handleChange} placeholder="12 rue des Lilas" className={inputClass} />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Code postal</label>
+                  <input type="text" name="code_postal" value={form.code_postal} onChange={handleChange} placeholder="75003" className={inputClass} />
+                </div>
                 <div>
                   <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Ville *</label>
                   <input type="text" name="ville" required value={form.ville} onChange={handleChange} placeholder="Paris" className={inputClass} />
@@ -328,24 +359,28 @@ export default function SoumettreEvenementPage() {
               </div>
             </div>
 
-            {/* Liens */}
+            {/* Liens — lien billetterie uniquement pour événements */}
             <div className="glass rounded-2xl p-6 flex flex-col gap-4">
               <h2 className="text-white/60 text-xs uppercase tracking-wider">Liens</h2>
 
-              <div>
-                <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Lien billetterie</label>
-                <input type="url" name="lien_billetterie" value={form.lien_billetterie} onChange={handleChange} placeholder="https://..." className={inputClass} />
-              </div>
+              {!isVenue && (
+                <div>
+                  <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Lien billetterie</label>
+                  <input type="url" name="lien_billetterie" value={form.lien_billetterie} onChange={handleChange} placeholder="https://..." className={inputClass} />
+                </div>
+              )}
 
               <div>
-                <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Instagram de l'événement</label>
+                <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Instagram</label>
                 <input type="text" name="instagram" value={form.instagram} onChange={handleChange} placeholder="@votre_compte" className={inputClass} />
               </div>
             </div>
 
             {/* Image */}
             <div className="glass rounded-2xl p-6 flex flex-col gap-4">
-              <h2 className="text-white/60 text-xs uppercase tracking-wider">Affiche / image</h2>
+              <h2 className="text-white/60 text-xs uppercase tracking-wider">
+                {isVenue ? "Photo" : "Affiche / image"}
+              </h2>
 
               <input type="file" accept="image/*" ref={fileRef} onChange={handleImage} className="hidden" />
 
@@ -366,8 +401,10 @@ export default function SoumettreEvenementPage() {
                   onClick={() => fileRef.current?.click()}
                   className="border border-dashed border-white/20 rounded-xl p-8 text-center hover:border-white/40 transition-colors"
                 >
-                  <div className="text-3xl mb-2">🖼️</div>
-                  <p className="text-white/40 text-sm">Cliquez pour ajouter une image</p>
+                  <div className="text-3xl mb-2">{isVenue ? "📷" : "🖼️"}</div>
+                  <p className="text-white/40 text-sm">
+                    {isVenue ? "Cliquez pour ajouter une photo" : "Cliquez pour ajouter une image"}
+                  </p>
                   <p className="text-white/20 text-xs mt-1">JPG, PNG · Max 5 Mo</p>
                 </button>
               )}
@@ -384,7 +421,7 @@ export default function SoumettreEvenementPage() {
               disabled={loading}
               className="w-full bg-gradient-to-r from-violet-500 to-blue-500 text-white font-semibold py-4 rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
             >
-              {loading ? "Envoi en cours..." : "Soumettre l'événement →"}
+              {loading ? "Envoi en cours..." : "Soumettre →"}
             </button>
           </form>
         </main>

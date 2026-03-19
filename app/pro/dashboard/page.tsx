@@ -10,8 +10,23 @@ import ProHeader from "../components/ProHeader";
 type Submission = {
   id: string;
   titre: string;
-  date_debut: string;
-  ville: string;
+  categorie?: string;
+  description?: string;
+  date_debut?: string;
+  heure_debut?: string;
+  date_fin?: string;
+  heure_fin?: string;
+  lieu_nom?: string;
+  adresse?: string;
+  code_postal?: string;
+  ville?: string;
+  pays?: string;
+  lien_billetterie?: string;
+  instagram?: string;
+  image_url?: string;
+  publish_instagram?: boolean;
+  instagram_publication_date?: string;
+  raison_refus?: string;
   statut: "en_attente" | "validé" | "refusé";
   created_at: any;
 };
@@ -26,6 +41,7 @@ export default function DashboardPage() {
   const { user, organizer } = useAuth();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -54,6 +70,10 @@ export default function DashboardPage() {
     total: submissions.length,
     valides: submissions.filter((s) => s.statut === "validé").length,
     en_attente: submissions.filter((s) => s.statut === "en_attente").length,
+  };
+
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id);
   };
 
   return (
@@ -122,20 +142,126 @@ export default function DashboardPage() {
               <div className="flex flex-col gap-3">
                 {submissions.map((sub) => {
                   const status = statusConfig[sub.statut] || statusConfig.en_attente;
+                  const isExpanded = expandedId === sub.id;
+
                   return (
-                    <div
-                      key={sub.id}
-                      className="glass rounded-2xl px-5 py-4 flex items-center justify-between gap-4"
-                    >
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white font-medium text-sm truncate">{sub.titre}</p>
-                        <p className="text-white/40 text-xs mt-0.5">
-                          {sub.ville} · {sub.date_debut ? new Date(sub.date_debut).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) : "—"}
-                        </p>
-                      </div>
-                      <span className={`shrink-0 text-xs font-medium px-3 py-1 rounded-full border ${status.bg} ${status.color}`}>
-                        {status.label}
-                      </span>
+                    <div key={sub.id} className="glass rounded-2xl overflow-hidden border border-white/5">
+                      {/* En-tête cliquable */}
+                      <button
+                        onClick={() => toggleExpand(sub.id)}
+                        className="w-full px-5 py-4 flex items-center justify-between gap-4 hover:bg-white/5 transition-colors text-left"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white font-medium text-sm truncate">{sub.titre}</p>
+                          <p className="text-white/40 text-xs mt-0.5">
+                            {sub.ville}
+                            {sub.date_debut
+                              ? ` · ${new Date(sub.date_debut).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}`
+                              : ""}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className={`text-xs font-medium px-3 py-1 rounded-full border ${status.bg} ${status.color}`}>
+                            {status.label}
+                          </span>
+                          <span className="text-white/30 text-xs">{isExpanded ? "▲" : "▼"}</span>
+                        </div>
+                      </button>
+
+                      {/* Détails dépliables */}
+                      {isExpanded && (
+                        <div className="border-t border-white/5 px-5 py-5 flex flex-col gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {/* Colonne gauche */}
+                            <div className="flex flex-col gap-3">
+                              {sub.categorie && (
+                                <div>
+                                  <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Catégorie</p>
+                                  <p className="text-white text-sm">{sub.categorie}</p>
+                                </div>
+                              )}
+                              {sub.description && (
+                                <div>
+                                  <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Description</p>
+                                  <p className="text-white/80 text-sm leading-relaxed">{sub.description}</p>
+                                </div>
+                              )}
+                              {(sub.date_debut || sub.heure_debut) && (
+                                <div>
+                                  <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Date & heure</p>
+                                  <p className="text-white/80 text-sm">
+                                    {sub.date_debut && new Date(sub.date_debut).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                                    {sub.heure_debut && ` · ${sub.heure_debut}`}
+                                    {sub.date_fin && ` → ${new Date(sub.date_fin).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}`}
+                                    {sub.heure_fin && ` ${sub.heure_fin}`}
+                                  </p>
+                                </div>
+                              )}
+                              {(sub.lieu_nom || sub.adresse || sub.ville) && (
+                                <div>
+                                  <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Lieu</p>
+                                  <p className="text-white/80 text-sm">
+                                    {[sub.lieu_nom, sub.adresse, sub.code_postal, sub.ville, sub.pays].filter(Boolean).join(", ")}
+                                  </p>
+                                </div>
+                              )}
+                              {sub.lien_billetterie && (
+                                <div>
+                                  <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Billetterie</p>
+                                  <a href={sub.lien_billetterie} target="_blank" rel="noopener noreferrer" className="text-violet-400 text-sm hover:underline truncate block">
+                                    {sub.lien_billetterie}
+                                  </a>
+                                </div>
+                              )}
+                              {sub.instagram && (
+                                <div>
+                                  <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Instagram</p>
+                                  <p className="text-white/80 text-sm">{sub.instagram}</p>
+                                </div>
+                              )}
+                              {sub.publish_instagram && (
+                                <div className="flex items-center gap-2 text-pink-400 text-sm">
+                                  <span>📸</span>
+                                  <span>
+                                    Publication Instagram @agenda_lgbt
+                                    {sub.instagram_publication_date && ` · le ${sub.instagram_publication_date}`}
+                                  </span>
+                                </div>
+                              )}
+                              {sub.statut === "refusé" && sub.raison_refus && (
+                                <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+                                  <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Motif de refus</p>
+                                  <p className="text-red-400 text-sm">{sub.raison_refus}</p>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Colonne droite — image */}
+                            {sub.image_url && (
+                              <div>
+                                <p className="text-white/40 text-xs uppercase tracking-wider mb-2">Visuel</p>
+                                <img
+                                  src={sub.image_url}
+                                  alt={sub.titre}
+                                  className="w-full rounded-xl object-cover max-h-52"
+                                />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* CTA si refusé */}
+                          {sub.statut === "refusé" && (
+                            <div className="pt-2">
+                              <a
+                                href="/pro/soumettre"
+                                className="inline-block bg-gradient-to-r from-violet-500 to-blue-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:opacity-90 transition-opacity"
+                              >
+                                Soumettre à nouveau →
+                              </a>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
