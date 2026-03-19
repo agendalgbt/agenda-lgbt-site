@@ -30,7 +30,7 @@ export default function ProHeader() {
         {/* Logo — URL absolue pour éviter les problèmes de sous-domaine */}
         <a href="/pro/dashboard" className="flex items-center gap-2">
           <img
-            src="https://agendalgbt.com/logo.png"
+            src="/logo.png"
             alt="Agenda LGBT"
             className="w-7 h-7 rounded-lg object-contain bg-white"
           />
