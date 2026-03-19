@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { track } from "@vercel/analytics";
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -54,6 +55,7 @@ export default function Hero() {
             target="_blank"
             rel="noopener noreferrer"
             className="hover:opacity-80 transition-opacity hover:scale-105 transform"
+            onClick={() => track("click_app_store", { source: "hero" })}
           >
             <img
               src="/badge-appstore.svg"
@@ -67,6 +69,7 @@ export default function Hero() {
             target="_blank"
             rel="noopener noreferrer"
             className="hover:opacity-80 transition-opacity hover:scale-105 transform"
+            onClick={() => track("click_google_play", { source: "hero" })}
           >
             <img
               src="/badge-googleplay.svg"

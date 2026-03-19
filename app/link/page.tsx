@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 
 const FIREBASE_PROJECT_ID = "agendalgbt-app";
 const FIREBASE_API_KEY = "AIzaSyBX793d9b70uGXH3E9m_zUt-zK6B6w61gM";
@@ -150,6 +151,7 @@ export default function LinkPage() {
               href={link.href}
               target={link.href.startsWith("mailto") ? undefined : "_blank"}
               rel="noopener noreferrer"
+              onClick={() => track("click_link", { label: link.label, href: link.href })}
               className="group relative w-full rounded-2xl"
               style={{
                 opacity: visible ? 1 : 0,
@@ -197,6 +199,7 @@ export default function LinkPage() {
           href="https://www.instagram.com/agenda_lgbt/"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => track("click_link", { label: "Instagram @agenda_lgbt", href: "https://www.instagram.com/agenda_lgbt/" })}
           className="mt-8 flex items-center gap-2 text-white/30 hover:text-white/60 transition-colors text-sm"
         >
           <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
