@@ -360,7 +360,7 @@ export default function SoumettreEvenementPage() {
                   );
                 })()}
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Date de début *</label>
                     <input type="date" name="date_debut" required value={form.date_debut} onChange={handleChange} className={inputClass} />
@@ -371,7 +371,7 @@ export default function SoumettreEvenementPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Date de fin</label>
                     <input type="date" name="date_fin" value={form.date_fin} onChange={handleChange} className={inputClass} />
@@ -401,7 +401,7 @@ export default function SoumettreEvenementPage() {
                 <input type="text" name="adresse" value={form.adresse} onChange={handleChange} placeholder="12 rue des Lilas" className={inputClass} />
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Code postal</label>
                   <input type="text" name="code_postal" value={form.code_postal} onChange={handleChange} placeholder="75003" className={inputClass} />
