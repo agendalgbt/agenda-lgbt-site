@@ -12,6 +12,15 @@ export function middleware(request: NextRequest) {
       return NextResponse.rewrite(url);
     }
   }
+
+  // Si le visiteur arrive sur pro.agendalgbt.com → affiche /pro
+  if (hostname.startsWith("pro.")) {
+    const url = request.nextUrl.clone();
+    if (!url.pathname.startsWith("/pro")) {
+      url.pathname = "/pro" + url.pathname;
+      return NextResponse.rewrite(url);
+    }
+  }
 }
 
 export const config = {
