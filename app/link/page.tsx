@@ -2,7 +2,21 @@
 
 import { useEffect, useState } from "react";
 
-const links = [
+const FIREBASE_PROJECT_ID = "agendalgbt-app";
+const FIREBASE_API_KEY = "AIzaSyBX793d9b70uGXH3E9m_zUt-zK6B6w61gM";
+
+interface LinkItem {
+  label: string;
+  description: string;
+  emoji: string;
+  href: string;
+  gradient: string;
+  glow: string;
+  order: number;
+  active: boolean;
+}
+
+const fallbackLinks: LinkItem[] = [
   {
     emoji: "📱",
     label: "App Agenda LGBT 🏳️‍🌈",
@@ -10,6 +24,8 @@ const links = [
     href: "https://www.agendalgbt.com",
     gradient: "from-violet-500 to-blue-500",
     glow: "shadow-violet-500/30",
+    order: 1,
+    active: true,
   },
   {
     emoji: "🎉",
@@ -18,6 +34,8 @@ const links = [
     href: "https://foamy-hygienic-7f7.notion.site/1f20bca09cae80cfb911c5d0a5f177b0",
     gradient: "from-pink-500 to-rose-400",
     glow: "shadow-pink-500/30",
+    order: 2,
+    active: true,
   },
   {
     emoji: "🔥",
@@ -26,6 +44,8 @@ const links = [
     href: "https://sponsor.agendalgbt.com/",
     gradient: "from-orange-400 to-yellow-400",
     glow: "shadow-orange-400/30",
+    order: 3,
+    active: true,
   },
   {
     emoji: "💬",
@@ -34,14 +54,50 @@ const links = [
     href: "mailto:hello@agendalgbt.com",
     gradient: "from-green-400 to-emerald-500",
     glow: "shadow-green-400/30",
+    order: 4,
+    active: true,
   },
 ];
 
+function parseFirestoreDoc(doc: any): LinkItem {
+  const f = doc.fields || {};
+  return {
+    label: f.label?.stringValue || "",
+    description: f.description?.stringValue || "",
+    emoji: f.emoji?.stringValue || "🔗",
+    href: f.href?.stringValue || "#",
+    gradient: f.gradient?.stringValue || "from-violet-500 to-blue-500",
+    glow: f.glow?.stringValue || "shadow-violet-500/30",
+    order: parseInt(f.order?.integerValue || "0"),
+    active: f.active?.booleanValue ?? true,
+  };
+}
+
 export default function LinkPage() {
+  const [links, setLinks] = useState<LinkItem[]>(fallbackLinks);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setVisible(true), 100);
+    const fetchLinks = async () => {
+      try {
+        const res = await fetch(
+          `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/links?key=${FIREBASE_API_KEY}`
+        );
+        const data = await res.json();
+        if (data.documents && data.documents.length > 0) {
+          const parsed = data.documents
+            .map(parseFirestoreDoc)
+            .filter((l: LinkItem) => l.active)
+            .sort((a: LinkItem, b: LinkItem) => a.order - b.order);
+          setLinks(parsed);
+        }
+      } catch {
+        // garde les fallbackLinks si Firestore inaccessible
+      } finally {
+        setTimeout(() => setVisible(true), 100);
+      }
+    };
+    fetchLinks();
   }, []);
 
   return (
@@ -95,13 +151,8 @@ export default function LinkPage() {
                 transition: `opacity 0.5s ease ${i * 80 + 200}ms, transform 0.5s ease ${i * 80 + 200}ms`,
               }}
             >
-              {/* Gradient background */}
               <div className={`absolute inset-0 bg-gradient-to-r ${link.gradient} opacity-10 group-hover:opacity-20 transition-opacity`} />
-
-              {/* Border */}
-              <div className={`absolute inset-0 rounded-2xl border border-white/10 group-hover:border-white/20 transition-colors`} />
-
-              {/* Content */}
+              <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-white/20 transition-colors" />
               <div className="relative flex items-center gap-4 px-5 py-4">
                 <span className={`w-10 h-10 rounded-xl bg-gradient-to-br ${link.gradient} flex items-center justify-center text-xl shadow-lg ${link.glow} flex-shrink-0 group-hover:scale-110 transition-transform`}>
                   {link.emoji}
@@ -131,7 +182,6 @@ export default function LinkPage() {
           @agenda_lgbt
         </a>
 
-        {/* Footer */}
         <p className="mt-6 text-white/20 text-xs">© 2026 Agenda LGBT</p>
       </div>
     </main>
