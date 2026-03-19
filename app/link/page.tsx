@@ -157,10 +157,18 @@ export default function LinkPage() {
                 transition: `opacity 0.5s ease ${i * 80 + 200}ms, transform 0.5s ease ${i * 80 + 200}ms`,
               }}
             >
-              {/* Bordure colorée animée si highlight */}
+              {/* Bordure arc-en-ciel animée si highlight */}
               {link.highlight && (
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${link.gradient} animate-pulse opacity-70`} style={{ padding: "1px" }}>
-                  <div className="w-full h-full rounded-2xl bg-[#0a0a0f]" />
+                <div
+                  className="absolute inset-0 rounded-2xl"
+                  style={{
+                    background: "linear-gradient(90deg, #E53E3E, #ED8936, #ECC94B, #48BB78, #4299E1, #9F7AEA, #E53E3E)",
+                    backgroundSize: "200% 200%",
+                    animation: "rainbow-border 3s linear infinite",
+                    padding: "3px",
+                  }}
+                >
+                  <div className="w-full h-full rounded-[14px] bg-[#0a0a0f]" />
                 </div>
               )}
 
