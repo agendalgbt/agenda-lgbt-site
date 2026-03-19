@@ -205,7 +205,7 @@ export default function LinkPage() {
           @agenda_lgbt
         </a>
 
-        <p className="mt-6 text-white/20 text-xs">© 2026 Agenda LGBT</p>
+        <p className="mt-6 text-white/20 text-xs">© 2026 Pride Pulse</p>
       </div>
     </main>
   );
