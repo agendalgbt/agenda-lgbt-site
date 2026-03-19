@@ -38,7 +38,7 @@ export default function Hero() {
           <br />
           <span className="text-white">LGBT en France</span>
           <br />
-          <span className="text-white/80">&amp; Belgique</span>
+          <span className="text-white/80">&amp; Belgique test</span>
         </h1>
 
         {/* Subtitle */}
