@@ -14,6 +14,7 @@ interface LinkItem {
   glow: string;
   order: number;
   active: boolean;
+  highlight: boolean;
 }
 
 const fallbackLinks: LinkItem[] = [
@@ -26,6 +27,7 @@ const fallbackLinks: LinkItem[] = [
     glow: "shadow-violet-500/30",
     order: 1,
     active: true,
+    highlight: false,
   },
   {
     emoji: "🎉",
@@ -36,6 +38,7 @@ const fallbackLinks: LinkItem[] = [
     glow: "shadow-pink-500/30",
     order: 2,
     active: true,
+    highlight: false,
   },
   {
     emoji: "🔥",
@@ -46,6 +49,7 @@ const fallbackLinks: LinkItem[] = [
     glow: "shadow-orange-400/30",
     order: 3,
     active: true,
+    highlight: false,
   },
   {
     emoji: "💬",
@@ -56,6 +60,7 @@ const fallbackLinks: LinkItem[] = [
     glow: "shadow-green-400/30",
     order: 4,
     active: true,
+    highlight: false,
   },
 ];
 
@@ -70,6 +75,7 @@ function parseFirestoreDoc(doc: any): LinkItem {
     glow: f.glow?.stringValue || "shadow-violet-500/30",
     order: parseInt(f.order?.integerValue || "0"),
     active: f.active?.booleanValue ?? true,
+    highlight: f.highlight?.booleanValue ?? false,
   };
 }
 
@@ -144,26 +150,35 @@ export default function LinkPage() {
               href={link.href}
               target={link.href.startsWith("mailto") ? undefined : "_blank"}
               rel="noopener noreferrer"
-              className="group relative w-full rounded-2xl overflow-hidden"
+              className="group relative w-full rounded-2xl"
               style={{
                 opacity: visible ? 1 : 0,
                 transform: visible ? "translateY(0)" : "translateY(20px)",
                 transition: `opacity 0.5s ease ${i * 80 + 200}ms, transform 0.5s ease ${i * 80 + 200}ms`,
               }}
             >
-              <div className={`absolute inset-0 bg-gradient-to-r ${link.gradient} opacity-10 group-hover:opacity-20 transition-opacity`} />
-              <div className="absolute inset-0 rounded-2xl border border-white/10 group-hover:border-white/20 transition-colors" />
-              <div className="relative flex items-center gap-4 px-5 py-4">
-                <span className={`w-10 h-10 rounded-xl bg-gradient-to-br ${link.gradient} flex items-center justify-center text-xl shadow-lg ${link.glow} flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                  {link.emoji}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div className="text-white font-semibold text-sm leading-tight">{link.label}</div>
-                  <div className="text-white/40 text-xs mt-0.5">{link.description}</div>
+              {/* Bordure colorée animée si highlight */}
+              {link.highlight && (
+                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${link.gradient} animate-pulse opacity-70`} style={{ padding: "1px" }}>
+                  <div className="w-full h-full rounded-2xl bg-[#0a0a0f]" />
                 </div>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors flex-shrink-0">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
+              )}
+
+              <div className="relative rounded-2xl overflow-hidden">
+                <div className={`absolute inset-0 bg-gradient-to-r ${link.gradient} opacity-10 group-hover:opacity-20 transition-opacity`} />
+                <div className={`absolute inset-0 rounded-2xl border ${link.highlight ? "border-transparent" : "border-white/10 group-hover:border-white/20"} transition-colors`} />
+                <div className="relative flex items-center gap-4 px-5 py-4">
+                  <span className={`w-10 h-10 rounded-xl bg-gradient-to-br ${link.gradient} flex items-center justify-center text-xl shadow-lg ${link.glow} flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                    {link.emoji}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-white font-semibold text-sm leading-tight">{link.label}</div>
+                    <div className="text-white/40 text-xs mt-0.5">{link.description}</div>
+                  </div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-white/20 group-hover:text-white/50 transition-colors flex-shrink-0">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </div>
             </a>
           ))}
