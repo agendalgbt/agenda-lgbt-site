@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { db, auth } from "@/lib/firebase";
@@ -15,12 +15,24 @@ export default function ProfilPage() {
   const [error, setError] = useState("");
 
   const [form, setForm] = useState({
-    nom_organisation: organizer?.nom_organisation || "",
-    contact_nom: organizer?.contact_nom || "",
-    telephone: organizer?.telephone || "",
-    instagram: organizer?.instagram || "",
-    ville: organizer?.ville || "",
+    nom_organisation: "",
+    contact_nom: "",
+    telephone: "",
+    instagram: "",
+    ville: "",
   });
+
+  useEffect(() => {
+    if (organizer) {
+      setForm({
+        nom_organisation: organizer.nom_organisation || "",
+        contact_nom: organizer.contact_nom || "",
+        telephone: organizer.telephone || "",
+        instagram: organizer.instagram || "",
+        ville: organizer.ville || "",
+      });
+    }
+  }, [organizer]);
 
   const [pwForm, setPwForm] = useState({
     current: "",

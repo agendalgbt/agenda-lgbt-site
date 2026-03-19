@@ -103,7 +103,7 @@ export default function InscriptionPage() {
           </div>
 
           <div>
-            <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Votre nom *</label>
+            <label className="text-white/60 text-xs uppercase tracking-wider block mb-1.5">Votre prénom et nom *</label>
             <input
               type="text"
               name="contact_nom"
