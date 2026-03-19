@@ -54,31 +54,33 @@ export default function ProLandingPage() {
       </div>
 
       {/* Header simple */}
-      <header className="relative z-10 flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">
-        <a href="/pro" className="flex items-center gap-2">
-          <img src="/logo.png" alt="Agenda LGBT" className="w-8 h-8 rounded-lg object-contain bg-white" />
-          <span className="font-bold">
-            <span className="rainbow-text">Agenda</span>
-            <span className="text-white ml-1">LGBT</span>
-            <span className="text-white/40 ml-2 font-normal text-sm">Pro</span>
-          </span>
-        </a>
-        <div className="flex items-center gap-4">
-          <a href="/pro/connexion" className="text-white/50 hover:text-white text-sm transition-colors">
-            Connexion
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#0a0a0f]/90 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <a href="/pro" className="flex items-center gap-2">
+            <img src="/logo.png" alt="Agenda LGBT" className="w-7 h-7 rounded-lg object-contain bg-white" />
+            <span className="font-bold text-sm">
+              <span className="rainbow-text">Agenda</span>
+              <span className="text-white ml-1">LGBT</span>
+              <span className="text-white/40 ml-2 font-normal">Pro</span>
+            </span>
           </a>
-          <a
-            href="/pro/inscription"
-            className="bg-gradient-to-r from-violet-500 to-blue-500 text-white text-sm px-4 py-2 rounded-xl hover:opacity-90 transition-opacity font-medium"
-          >
-            Créer un compte
-          </a>
+          <div className="flex items-center gap-4">
+            <a href="/pro/connexion" className="text-white/50 hover:text-white text-sm transition-colors">
+              Connexion
+            </a>
+            <a
+              href="/pro/inscription"
+              className="bg-gradient-to-r from-violet-500 to-blue-500 text-white text-sm px-4 py-2 rounded-xl hover:opacity-90 transition-opacity font-medium"
+            >
+              Créer un compte
+            </a>
+          </div>
         </div>
       </header>
 
       {/* Hero */}
       <section
-        className="relative z-10 max-w-4xl mx-auto px-6 pt-16 pb-24 text-center"
+        className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-24 text-center"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(30px)",
