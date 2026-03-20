@@ -3,7 +3,24 @@
     "allow": [
       "Read(//usr/local/bin/**)",
       "Read(//opt/homebrew/bin/**)",
-      "Bash(echo $PATH)"
+      "Bash(echo $PATH)",
+      "WebFetch(domain:agenda-lgbt-site.vercel.app)",
+      "mcp__mcp-registry__search_mcp_registry",
+      "WebFetch(domain:foamy-hygienic-7f7.notion.site)",
+      "mcp__github__get_file_contents",
+      "mcp__github__create_or_update_file",
+      "mcp__github__create_branch",
+      "Bash(python3 -c \":*)",
+      "Bash(python3 -c \"import json, sys; data = json.load\\(sys.stdin\\); print\\(''''mcpServers'''' in data, data.get\\(''''mcpServers'''', {}\\).keys\\(\\)\\)\")",
+      "WebFetch(domain:linktr.ee)",
+      "Bash(curl -s \"https://firestore.googleapis.com/v1/projects/agendalgbt-app/databases/\\(default\\)/documents/links?key=AIzaSyBX793d9b70uGXH3E9m_zUt-zK6B6w61gM\")",
+      "Bash(python3 -m json.tool)",
+      "mcp__github__search_repositories",
+      "Bash(curl -s \"https://raw.githubusercontent.com/agendalgbt/dashboard-agendalgbt/main/app.py\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/agendalgbt/dashboard-agendalgbt/main/requirements.txt\")",
+      "Bash(npm run:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s https://raw.githubusercontent.com/agendalgbt/dashboard-agendalgbt/main/app.py)"
     ]
   }
 }
