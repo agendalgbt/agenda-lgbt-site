@@ -146,12 +146,12 @@ export default function DashboardPage() {
 
                   return (
                     <div key={sub.id} className="glass rounded-2xl overflow-hidden border border-white/5">
-                      {/* En-tête cliquable */}
-                      <button
-                        onClick={() => toggleExpand(sub.id)}
-                        className="w-full px-5 py-4 flex items-center justify-between gap-4 hover:bg-white/5 transition-colors text-left"
-                      >
-                        <div className="flex-1 min-w-0">
+                      {/* En-tête */}
+                      <div className="w-full px-5 py-4 flex items-center justify-between gap-4 hover:bg-white/5 transition-colors">
+                        <button
+                          onClick={() => toggleExpand(sub.id)}
+                          className="flex-1 min-w-0 text-left"
+                        >
                           <p className="text-white font-medium text-sm truncate">{sub.titre}</p>
                           <p className="text-white/40 text-xs mt-0.5">
                             {sub.ville}
@@ -159,14 +159,35 @@ export default function DashboardPage() {
                               ? ` · ${new Date(sub.date_debut).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}`
                               : ""}
                           </p>
-                        </div>
-                        <div className="flex items-center gap-3 shrink-0">
+                        </button>
+                        <div className="flex items-center gap-2 shrink-0">
+                          {/* Pills sponsoring si validé */}
+                          {sub.statut === "validé" && (
+                            <>
+                              <a
+                                href={`/pro/sponsoring/evenement?eventName=${encodeURIComponent(sub.titre)}`}
+                                className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 transition-colors"
+                              >
+                                📱 App
+                              </a>
+                              {sub.categorie === "Clubbing" && (
+                                <a
+                                  href="/pro/sponsoring/instagram"
+                                  className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border border-pink-500/40 bg-pink-500/10 text-pink-300 hover:bg-pink-500/20 transition-colors"
+                                >
+                                  📸 Instagram
+                                </a>
+                              )}
+                            </>
+                          )}
                           <span className={`text-xs font-medium px-3 py-1 rounded-full border ${status.bg} ${status.color}`}>
                             {status.label}
                           </span>
-                          <span className="text-white/30 text-xs">{isExpanded ? "▲" : "▼"}</span>
+                          <button onClick={() => toggleExpand(sub.id)} className="text-white/30 text-xs px-1">
+                            {isExpanded ? "▲" : "▼"}
+                          </button>
                         </div>
-                      </button>
+                      </div>
 
                       {/* Détails dépliables */}
                       {isExpanded && (
@@ -261,28 +282,6 @@ export default function DashboardPage() {
                             </div>
                           )}
 
-                          {/* CTA sponsoring si validé */}
-                          {sub.statut === "validé" && (
-                            <div className="pt-2 border-t border-white/5">
-                              <p className="text-white/40 text-xs uppercase tracking-wider mb-3">Booster cet événement</p>
-                              <div className="flex flex-wrap gap-2">
-                                <a
-                                  href={`/pro/sponsoring/evenement?eventName=${encodeURIComponent(sub.titre)}`}
-                                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 transition-colors"
-                                >
-                                  📱 Sponsoriser sur l'App
-                                </a>
-                                {sub.categorie === "Clubbing" && (
-                                  <a
-                                    href="/pro/sponsoring/instagram"
-                                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border border-pink-500/40 bg-pink-500/10 text-pink-300 hover:bg-pink-500/20 transition-colors"
-                                  >
-                                    📸 Sponsoriser sur Instagram
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                          )}
                         </div>
                       )}
                     </div>
