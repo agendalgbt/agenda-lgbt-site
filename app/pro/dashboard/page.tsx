@@ -242,7 +242,7 @@ export default function DashboardPage() {
                               </a>
                               {sub.categorie === "Clubbing" && (
                                 <a
-                                  href="/pro/sponsoring/instagram"
+                                  href={`/pro/sponsoring/instagram?submissionTitle=${encodeURIComponent(sub.titre)}`}
                                   className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border border-pink-500/40 bg-pink-500/10 text-pink-300 hover:bg-pink-500/20 transition-colors"
                                 >
                                   📸 Instagram
