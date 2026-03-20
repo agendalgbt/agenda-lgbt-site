@@ -1350,9 +1350,14 @@ const BACKEND_URL = "";
   async function init() {
     await loadEvents();
 
-    // Pré-sélection depuis le dashboard via ?eventName=
+    // Pré-remplissage depuis le dashboard
     const params = new URLSearchParams(window.location.search);
     const presetName = params.get('eventName');
+    const presetEmail = params.get('userEmail');
+    if (presetEmail) {
+      const emailField = document.getElementById('billing-email');
+      if (emailField) emailField.value = presetEmail;
+    }
     if (presetName && allEvents.length > 0) {
       const input = document.getElementById('search-input');
       if (input) input.value = presetName;

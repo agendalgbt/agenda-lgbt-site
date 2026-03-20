@@ -473,6 +473,14 @@
   loadBookedDays();
   document.getElementById('event-date').min = new Date().toISOString().split('T')[0];
 
+  // Pré-remplissage email depuis le dashboard
+  const _urlParams = new URLSearchParams(window.location.search);
+  const _presetEmail = _urlParams.get('userEmail');
+  if (_presetEmail) {
+    const emailField = document.getElementById('customer-email');
+    if (emailField) emailField.value = _presetEmail;
+  }
+
   // ================================================================
   // FIREBASE — dates réservées par type
   // ================================================================
