@@ -31,6 +31,25 @@ type Submission = {
   created_at: any;
 };
 
+type Sponsorship = {
+  id: string;
+  eventName: string;
+  days: string[];
+  sponsored_until?: any;
+  status: string;
+  created_at: any;
+};
+
+type InstagramSponsorship = {
+  id: string;
+  eventName: string;
+  packName: string;
+  storyDates: string[];
+  postDate?: string;
+  status: string;
+  created_at: any;
+};
+
 const statusConfig = {
   en_attente: { label: "En attente", color: "text-amber-400", bg: "bg-amber-400/10 border-amber-400/20" },
   validé: { label: "Validé", color: "text-green-400", bg: "bg-green-400/10 border-green-400/20" },
@@ -40,22 +59,28 @@ const statusConfig = {
 export default function DashboardPage() {
   const { user, organizer } = useAuth();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [sponsorships, setSponsorships] = useState<Sponsorship[]>([]);
+  const [igSponsorships, setIgSponsorships] = useState<InstagramSponsorship[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
 
-    const fetchSubmissions = async () => {
+    const fetchAll = async () => {
       try {
-        const q = query(
-          collection(db, "submissions"),
-          where("organizer_id", "==", user.uid)
-        );
-        const snap = await getDocs(q);
-        const list = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Submission));
+        const [subSnap, sponSnap, igSnap] = await Promise.all([
+          getDocs(query(collection(db, "submissions"), where("organizer_id", "==", user.uid))),
+          getDocs(query(collection(db, "sponsorships"), where("orga_email", "==", user.email))),
+          getDocs(query(collection(db, "instagram_sponsorships"), where("customerEmail", "==", user.email))),
+        ]);
+
+        const list = subSnap.docs.map((d) => ({ id: d.id, ...d.data() } as Submission));
         list.sort((a, b) => (b.created_at?.seconds || 0) - (a.created_at?.seconds || 0));
         setSubmissions(list);
+
+        setSponsorships(sponSnap.docs.map((d) => ({ id: d.id, ...d.data() } as Sponsorship)));
+        setIgSponsorships(igSnap.docs.map((d) => ({ id: d.id, ...d.data() } as InstagramSponsorship)));
       } catch (err) {
         console.error(err);
       } finally {
@@ -63,13 +88,33 @@ export default function DashboardPage() {
       }
     };
 
-    fetchSubmissions();
+    fetchAll();
   }, [user]);
+
+  const today = new Date().toISOString().split("T")[0];
+
+  // Sponsorisations App actives (au moins un jour >= aujourd'hui)
+  const activeSponsorships = sponsorships.filter((s) =>
+    s.days?.some((d) => d >= today)
+  );
+
+  // Vérifie si un event a une sponsorisation App active
+  const hasAppSponsoring = (titre: string) =>
+    activeSponsorships.some((s) =>
+      s.eventName?.toLowerCase() === titre.toLowerCase()
+    );
+
+  // Vérifie si un event a une sponsorisation Instagram
+  const hasIgSponsoring = (titre: string) =>
+    igSponsorships.some((s) =>
+      s.eventName?.toLowerCase() === titre.toLowerCase()
+    );
 
   const stats = {
     total: submissions.length,
     valides: submissions.filter((s) => s.statut === "validé").length,
     en_attente: submissions.filter((s) => s.statut === "en_attente").length,
+    sponsorisations: activeSponsorships.length + igSponsorships.length,
   };
 
   const toggleExpand = (id: string) => {
@@ -92,11 +137,12 @@ export default function DashboardPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-10">
+          <div className="grid grid-cols-4 gap-4 mb-10">
             {[
               { label: "Événements soumis", value: stats.total },
               { label: "Validés", value: stats.valides },
               { label: "En attente", value: stats.en_attente },
+              { label: "Sponsorisations actives", value: stats.sponsorisations },
             ].map((s) => (
               <div key={s.label} className="glass rounded-2xl p-5 text-center">
                 <div className="text-2xl font-bold rainbow-text">{s.value}</div>
@@ -143,6 +189,8 @@ export default function DashboardPage() {
                 {submissions.map((sub) => {
                   const status = statusConfig[sub.statut] || statusConfig.en_attente;
                   const isExpanded = expandedId === sub.id;
+                  const appSponsored = hasAppSponsoring(sub.titre);
+                  const igSponsored = hasIgSponsoring(sub.titre);
 
                   return (
                     <div key={sub.id} className="glass rounded-2xl overflow-hidden border border-white/5">
@@ -161,6 +209,18 @@ export default function DashboardPage() {
                           </p>
                         </button>
                         <div className="flex items-center gap-2 shrink-0">
+                          {/* Badges sponsoring actif */}
+                          {appSponsored && (
+                            <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-300">
+                              ⚡ App
+                            </span>
+                          )}
+                          {igSponsored && (
+                            <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border border-pink-500/40 bg-pink-500/10 text-pink-300">
+                              ⚡ Instagram
+                            </span>
+                          )}
+
                           {/* Pills sponsoring si validé */}
                           {sub.statut === "validé" && (
                             <>
@@ -180,6 +240,7 @@ export default function DashboardPage() {
                               )}
                             </>
                           )}
+
                           <span className={`text-xs font-medium px-3 py-1 rounded-full border ${status.bg} ${status.color}`}>
                             {status.label}
                           </span>
@@ -255,6 +316,38 @@ export default function DashboardPage() {
                                   <p className="text-red-400 text-sm">{sub.raison_refus}</p>
                                 </div>
                               )}
+
+                              {/* Détail sponsoring App actif */}
+                              {appSponsored && (() => {
+                                const sp = activeSponsorships.find(
+                                  (s) => s.eventName?.toLowerCase() === sub.titre.toLowerCase()
+                                );
+                                const futureDays = sp?.days?.filter((d) => d >= today).sort() || [];
+                                return futureDays.length > 0 ? (
+                                  <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3">
+                                    <p className="text-amber-300 text-xs font-semibold mb-1">⚡ Sponsorisation App active</p>
+                                    <p className="text-white/60 text-xs">
+                                      Du {new Date(futureDays[0]).toLocaleDateString("fr-FR")} au {new Date(futureDays[futureDays.length - 1]).toLocaleDateString("fr-FR")} · {futureDays.length} jour{futureDays.length > 1 ? "s" : ""} restant{futureDays.length > 1 ? "s" : ""}
+                                    </p>
+                                  </div>
+                                ) : null;
+                              })()}
+
+                              {/* Détail sponsoring Instagram */}
+                              {igSponsored && (() => {
+                                const ig = igSponsorships.find(
+                                  (s) => s.eventName?.toLowerCase() === sub.titre.toLowerCase()
+                                );
+                                return ig ? (
+                                  <div className="bg-pink-500/10 border border-pink-500/20 rounded-xl px-4 py-3">
+                                    <p className="text-pink-300 text-xs font-semibold mb-1">⚡ Sponsorisation Instagram — {ig.packName}</p>
+                                    <p className="text-white/60 text-xs">
+                                      {ig.storyDates?.length || 0} story{(ig.storyDates?.length || 0) > 1 ? "s" : ""}
+                                      {ig.postDate ? ` · 1 post le ${new Date(ig.postDate).toLocaleDateString("fr-FR")}` : ""}
+                                    </p>
+                                  </div>
+                                ) : null;
+                              })()}
                             </div>
 
                             {/* Colonne droite — image */}
@@ -281,7 +374,6 @@ export default function DashboardPage() {
                               </a>
                             </div>
                           )}
-
                         </div>
                       )}
                     </div>
