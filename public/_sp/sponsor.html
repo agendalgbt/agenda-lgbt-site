@@ -953,6 +953,7 @@ const BACKEND_URL = "";
   let selectedDays = new Set(); // clés "YYYY-MM-DD"
   let audienceCount = 0;
   let allEvents = [];
+  let submissionTitle = '';
 
   // ========================================================
   // FIREBASE — chargement des événements futurs
@@ -1330,7 +1331,7 @@ const BACKEND_URL = "";
           billingZip: document.getElementById('billing-zip').value.trim(),
           billingCity: document.getElementById('billing-city').value.trim(),
           orgaEmail: document.getElementById('billing-email').value.trim(),
-          submissionTitle: presetSubmissionTitle || '',
+          submissionTitle: submissionTitle,
         })
       });
 
@@ -1355,7 +1356,7 @@ const BACKEND_URL = "";
     const params = new URLSearchParams(window.location.search);
     const presetName = params.get('eventName');
     const presetEmail = params.get('userEmail');
-    const presetSubmissionTitle = params.get('submissionTitle');
+    submissionTitle = params.get('submissionTitle') || '';
     if (presetEmail) {
       const emailField = document.getElementById('billing-email');
       if (emailField) emailField.value = presetEmail;
