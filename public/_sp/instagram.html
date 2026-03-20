@@ -746,8 +746,8 @@
         })
       });
       const data = await resp.json();
-      if (!data.url) throw new Error(data.error || 'URL manquante');
-      window.location.href = data.url;
+      if (!data.url) throw new Error(data.error || 'Erreur Stripe');
+      window.top.location.href = data.url;
     } catch(e) {
       console.error('Erreur paiement:', e);
       btn.disabled = false;
