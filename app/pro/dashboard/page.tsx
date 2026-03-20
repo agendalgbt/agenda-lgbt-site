@@ -35,6 +35,7 @@ type Submission = {
 type Sponsorship = {
   id: string;
   eventName: string;
+  submission_title?: string;
   days: string[];
   sponsored_until?: any;
   status: string;
@@ -104,9 +105,10 @@ export default function DashboardPage() {
     s.days?.some((d) => d >= today)
   );
 
-  // Vérifie si un event a une sponsorisation App active
+  // Vérifie si un event a une sponsorisation App active (match par submissionTitle ou eventName)
   const hasAppSponsoring = (titre: string) =>
     activeSponsorships.some((s) =>
+      (s.submission_title && s.submission_title.toLowerCase() === titre.toLowerCase()) ||
       s.eventName?.toLowerCase() === titre.toLowerCase()
     );
 
@@ -231,7 +233,7 @@ export default function DashboardPage() {
                           {sub.statut === "validé" && (
                             <>
                               <a
-                                href={`/pro/sponsoring/evenement?eventName=${encodeURIComponent(sub.titre)}`}
+                                href={`/pro/sponsoring/evenement?eventName=${encodeURIComponent(sub.titre)}&submissionTitle=${encodeURIComponent(sub.titre)}`}
                                 className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 transition-colors"
                               >
                                 📱 App

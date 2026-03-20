@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { eventId, eventName, days, amount, amountHT, billingName, billingAddress, billingZip, billingCity, orgaEmail } = await req.json();
+    const { eventId, eventName, days, amount, amountHT, billingName, billingAddress, billingZip, billingCity, orgaEmail, submissionTitle } = await req.json();
 
     if (!eventId || !eventName || !days || !amount) {
       return NextResponse.json({ error: "Paramètres manquants" }, { status: 400 });
@@ -68,6 +68,7 @@ export async function POST(req: NextRequest) {
         amountHT: String(amountHT || amount),
         amount: String(amount),
         orgaEmail: orgaEmail || "",
+        submissionTitle: submissionTitle || "",
         billingName: billingName || "",
         billingAddress: billingAddress || "",
         billingZip: billingZip || "",

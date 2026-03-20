@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
         stripe_session_id: session.id,
         customer_email: session.customer_details?.email || "",
         orga_email: meta.orgaEmail || "",
+        submission_title: meta.submissionTitle || "",
         status: "active",
         created_at: admin.firestore.FieldValue.serverTimestamp(),
         sponsored_until: admin.firestore.Timestamp.fromDate(lastDay),

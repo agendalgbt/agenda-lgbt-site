@@ -1330,6 +1330,7 @@ const BACKEND_URL = "";
           billingZip: document.getElementById('billing-zip').value.trim(),
           billingCity: document.getElementById('billing-city').value.trim(),
           orgaEmail: document.getElementById('billing-email').value.trim(),
+          submissionTitle: presetSubmissionTitle || '',
         })
       });
 
@@ -1354,6 +1355,7 @@ const BACKEND_URL = "";
     const params = new URLSearchParams(window.location.search);
     const presetName = params.get('eventName');
     const presetEmail = params.get('userEmail');
+    const presetSubmissionTitle = params.get('submissionTitle');
     if (presetEmail) {
       const emailField = document.getElementById('billing-email');
       if (emailField) emailField.value = presetEmail;
