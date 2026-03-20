@@ -260,6 +260,29 @@ export default function DashboardPage() {
                               </a>
                             </div>
                           )}
+
+                          {/* CTA sponsoring si validé */}
+                          {sub.statut === "validé" && (
+                            <div className="pt-2 border-t border-white/5">
+                              <p className="text-white/40 text-xs uppercase tracking-wider mb-3">Booster cet événement</p>
+                              <div className="flex flex-wrap gap-2">
+                                <a
+                                  href={`/pro/sponsoring/evenement?eventName=${encodeURIComponent(sub.titre)}`}
+                                  className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border border-violet-500/40 bg-violet-500/10 text-violet-300 hover:bg-violet-500/20 transition-colors"
+                                >
+                                  📱 Sponsoriser sur l'App
+                                </a>
+                                {sub.categorie === "Clubbing" && (
+                                  <a
+                                    href="/pro/sponsoring/instagram"
+                                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border border-pink-500/40 bg-pink-500/10 text-pink-300 hover:bg-pink-500/20 transition-colors"
+                                  >
+                                    📸 Sponsoriser sur Instagram
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
