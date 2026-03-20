@@ -69,22 +69,36 @@ export default function DashboardPage() {
 
     const fetchAll = async () => {
       try {
-        const [subSnap, sponSnap, igSnap] = await Promise.all([
-          getDocs(query(collection(db, "submissions"), where("organizer_id", "==", user.uid))),
-          getDocs(query(collection(db, "sponsorships"), where("orga_email", "==", user.email))),
-          getDocs(query(collection(db, "instagram_sponsorships"), where("customerEmail", "==", user.email))),
-        ]);
-
+        // Soumissions — critique, doit fonctionner
+        const subSnap = await getDocs(
+          query(collection(db, "submissions"), where("organizer_id", "==", user.uid))
+        );
         const list = subSnap.docs.map((d) => ({ id: d.id, ...d.data() } as Submission));
         list.sort((a, b) => (b.created_at?.seconds || 0) - (a.created_at?.seconds || 0));
         setSubmissions(list);
-
-        setSponsorships(sponSnap.docs.map((d) => ({ id: d.id, ...d.data() } as Sponsorship)));
-        setIgSponsorships(igSnap.docs.map((d) => ({ id: d.id, ...d.data() } as InstagramSponsorship)));
       } catch (err) {
-        console.error(err);
+        console.error("Erreur soumissions:", err);
       } finally {
         setLoading(false);
+      }
+
+      // Sponsorisations — non bloquantes
+      try {
+        const sponSnap = await getDocs(
+          query(collection(db, "sponsorships"), where("orga_email", "==", user.email))
+        );
+        setSponsorships(sponSnap.docs.map((d) => ({ id: d.id, ...d.data() } as Sponsorship)));
+      } catch (err) {
+        console.error("Erreur sponsorships:", err);
+      }
+
+      try {
+        const igSnap = await getDocs(
+          query(collection(db, "instagram_sponsorships"), where("customerEmail", "==", user.email))
+        );
+        setIgSponsorships(igSnap.docs.map((d) => ({ id: d.id, ...d.data() } as InstagramSponsorship)));
+      } catch (err) {
+        console.error("Erreur instagram_sponsorships:", err);
       }
     };
 
