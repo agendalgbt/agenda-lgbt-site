@@ -10,9 +10,11 @@ function SponsoringEvenementInner() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const eventName = searchParams.get("eventName") || "";
+  const submissionTitle = searchParams.get("submissionTitle") || "";
 
   const params = new URLSearchParams();
   if (eventName) params.set("eventName", eventName);
+  if (submissionTitle) params.set("submissionTitle", submissionTitle);
   if (user?.email) params.set("userEmail", user.email);
   const src = `/_sp/sponsor.html${params.toString() ? "?" + params.toString() : ""}`;
 
