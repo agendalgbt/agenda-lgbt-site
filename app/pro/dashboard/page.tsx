@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+// sponsorships fetched via /api/pro/sponsorships (Firebase Admin)
 import { useAuth } from "../context/AuthContext";
 import AuthGuard from "../components/AuthGuard";
 import ProHeader from "../components/ProHeader";
@@ -82,23 +83,14 @@ export default function DashboardPage() {
         setLoading(false);
       }
 
-      // Sponsorisations — non bloquantes
+      // Sponsorisations — via API server (Firebase Admin, pas de règles Firestore)
       try {
-        const sponSnap = await getDocs(
-          query(collection(db, "sponsorships"), where("orga_email", "==", user.email))
-        );
-        setSponsorships(sponSnap.docs.map((d) => ({ id: d.id, ...d.data() } as Sponsorship)));
+        const res = await fetch(`/api/pro/sponsorships?email=${encodeURIComponent(user.email || "")}`);
+        const data = await res.json();
+        if (data.sponsorships) setSponsorships(data.sponsorships as Sponsorship[]);
+        if (data.igSponsorships) setIgSponsorships(data.igSponsorships as InstagramSponsorship[]);
       } catch (err) {
-        console.error("Erreur sponsorships:", err);
-      }
-
-      try {
-        const igSnap = await getDocs(
-          query(collection(db, "instagram_sponsorships"), where("customerEmail", "==", user.email))
-        );
-        setIgSponsorships(igSnap.docs.map((d) => ({ id: d.id, ...d.data() } as InstagramSponsorship)));
-      } catch (err) {
-        console.error("Erreur instagram_sponsorships:", err);
+        console.error("Erreur sponsorships API:", err);
       }
     };
 
