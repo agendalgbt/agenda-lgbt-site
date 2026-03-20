@@ -1327,7 +1327,7 @@ const BACKEND_URL = "";
       console.error('Erreur paiement:', e);
       btn.disabled = false;
       btn.textContent = '💳 Payer via Stripe';
-      alert('Une erreur est survenue lors de la connexion au paiement. Veuillez réessayer.');
+      alert('Erreur paiement : ' + e.message);
     }
   }
 
