@@ -45,6 +45,7 @@ type Sponsorship = {
 type InstagramSponsorship = {
   id: string;
   eventName: string;
+  submission_title?: string;
   packName: string;
   storyDates: string[];
   postDate?: string;
@@ -115,6 +116,7 @@ export default function DashboardPage() {
   // Vérifie si un event a une sponsorisation Instagram
   const hasIgSponsoring = (titre: string) =>
     igSponsorships.some((s) =>
+      (s.submission_title && s.submission_title.toLowerCase() === titre.toLowerCase()) ||
       s.eventName?.toLowerCase() === titre.toLowerCase()
     );
 
