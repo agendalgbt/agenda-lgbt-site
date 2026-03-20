@@ -102,11 +102,15 @@
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
 <script>
-  // Hide native header when embedded in iframe (ProHeader replaces it)
   if (window !== window.top) {
     document.addEventListener('DOMContentLoaded', function() {
+      // Hide native header (ProHeader replaces it)
       var h = document.querySelector('header');
       if (h) h.style.display = 'none';
+      // Match dashboard background
+      var style = document.createElement('style');
+      style.textContent = 'body { background: #0a0a0f !important; } body::before { display: none !important; }';
+      document.head.appendChild(style);
     });
   }
 </script>
