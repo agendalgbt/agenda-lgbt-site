@@ -97,7 +97,7 @@ Link-in-bio connectée à Firestore (`links`). Liens gérés dynamiquement depui
 - `/pro/connexion` — authentification
 
 **Pages protégées (Firebase Auth) :**
-- `/pro/dashboard` — statistiques, liste des soumissions
+- `/pro/dashboard` — statistiques, liste des soumissions, badges sponsoring
 - `/pro/soumettre` — formulaire de soumission d'événement
 - `/pro/profil` — informations de l'organisation
 - `/pro/sponsoring` — module de sponsorisation
@@ -107,6 +107,9 @@ Link-in-bio connectée à Firestore (`links`). Liens gérés dynamiquement depui
 - Upload d'image via Firebase Storage
 - Emails automatiques via Resend (bienvenue, soumission, validation, refus)
 - Validation/refus depuis le dashboard Streamlit
+- Badges sponsoring sur les events validés (⚡ App / ⚡ Instagram)
+- Pills CTA "📱 App" / "📸 Instagram" sur les events validés pour accéder au sponsoring avec event pré-sélectionné
+- Compteur "Sponsorisations actives" dans les stats du dashboard
 
 #### Collections Firestore :
 - `organizers` — profils organisateurs
@@ -145,6 +148,23 @@ Formulaire 4 étapes :
 **Packs :**
 - *Visibilité Express* (79€ HT) : 2 Stories + lien billetterie + Agenda Hebdomadaire
 - *Sold Out* (129€ HT) : 3 Stories + 1 Post Feed + Coup de Cœur + Agenda Hebdomadaire + lien bio 24h Jour J
+
+### Liaison Dashboard ↔ Sponsoring
+
+Quand un organisateur clique sur "📱 App" ou "📸 Instagram" depuis le dashboard, le titre de la soumission (`sub.titre`) est passé en paramètre URL (`?submissionTitle=xxx`). Ce paramètre est transmis via l'iframe jusqu'au checkout Stripe, puis stocké dans Firestore (`submission_title`). Le dashboard matche les sponsorisations par `submission_title` (fiable) ou `eventName` (fallback).
+
+### API serveur sponsoring
+- `/api/pro/sponsorships?email=xxx` — récupère les sponsorisations de l'orga via Firebase Admin (contourne les règles Firestore client)
+
+**Règles Firestore requises :**
+```
+match /sponsorships/{doc} {
+  allow read: if request.auth != null && request.auth.token.email == resource.data.orga_email;
+}
+match /instagram_sponsorships/{doc} {
+  allow read: if request.auth != null && request.auth.token.email == resource.data.customerEmail;
+}
+```
 
 ### Webhooks Stripe
 - `/api/stripe/webhook` — met à jour `isSponsored` dans `activities`, crée la transaction dans `sponsorships`, envoie emails
