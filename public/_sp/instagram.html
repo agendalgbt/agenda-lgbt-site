@@ -225,6 +225,15 @@
     }
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
+<script>
+  // Hide native header when embedded in iframe (ProHeader replaces it)
+  if (window !== window.top) {
+    document.addEventListener('DOMContentLoaded', function() {
+      var h = document.querySelector('header');
+      if (h) h.style.display = 'none';
+    });
+  }
+</script>
 </head>
 <body>
 
