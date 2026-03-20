@@ -198,7 +198,7 @@ export default function SponsoringInstagramPage() {
           {step === 1 && (
             <div className="glass rounded-2xl p-6">
               <h2 className="text-xl text-white font-light mb-1">Choisissez votre pack</h2>
-              <p className="text-white/40 text-sm mb-6">Deux formules pour booster votre visibilité sur @agenda_lgbt.</p>
+              <p className="text-white/40 text-sm mb-6">Deux formules pour booster vos ventes et remplir votre événement.</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 {/* Pack Express */}
                 <button
@@ -210,12 +210,11 @@ export default function SponsoringInstagramPage() {
                   <div className="text-white font-semibold text-base mb-1">Visibilité Express</div>
                   <div className="text-white/40 text-xs mb-4 leading-relaxed">Le boost idéal la semaine J–7 pour activer votre billetterie.</div>
                   <ul className="flex flex-col gap-1.5 mb-4">
-                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>2 stories sur @agenda_lgbt</li>
-                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>Dates au choix (60 jours)</li>
-                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>Facture PDF incluse</li>
+                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>2 Stories séquencées (Teasing + Rappel J–1 ou Jour J)</li>
+                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>Lien direct vers votre billetterie (Sticker Link)</li>
+                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>Mention dans l&apos;Agenda Hebdomadaire (Slide dédiée avec l&apos;affiche de votre événement)</li>
                   </ul>
                   <div className="text-2xl font-semibold text-white">79€ <span className="text-sm font-light text-white/40">HT</span></div>
-                  <div className="text-white/30 text-xs">{fmt(PACK_PRICES.express * (1 + TVA))} € TTC</div>
                 </button>
 
                 {/* Pack Sold Out */}
@@ -229,13 +228,13 @@ export default function SponsoringInstagramPage() {
                   <div className="text-white font-semibold text-base mb-1">Sold Out</div>
                   <div className="text-white/40 text-xs mb-4 leading-relaxed">La stratégie complète pour ancrer votre événement et saturer les ventes.</div>
                   <ul className="flex flex-col gap-1.5 mb-4">
-                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>3 stories sur @agenda_lgbt</li>
-                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>1 post Feed permanent</li>
-                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>Dates au choix (60 jours)</li>
-                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>Facture PDF incluse</li>
+                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>1 Post Feed permanent — visuel affiche + copywriting persuasif</li>
+                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>3 Stories réparties — annonce, rappel mid-week, dernier appel</li>
+                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>Mise en avant &quot;Coup de Cœur&quot; dans l&apos;agenda (top position)</li>
+                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>Mention dans l&apos;Agenda Hebdomadaire (Slide dédiée avec l&apos;affiche de votre événement)</li>
+                    <li className="text-white/50 text-xs flex gap-2"><span className="text-amber-400">✦</span>Lien billetterie permanent en bio pendant 24h le Jour J</li>
                   </ul>
                   <div className="text-2xl font-semibold text-white">129€ <span className="text-sm font-light text-white/40">HT</span></div>
-                  <div className="text-white/30 text-xs">{fmt(PACK_PRICES.soldout * (1 + TVA))} € TTC</div>
                 </button>
               </div>
               <button
