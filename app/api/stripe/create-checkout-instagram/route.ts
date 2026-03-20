@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   try {
     const {
       pack, packName, eventName, eventDate, instaHandle,
-      ticketLink, brief, transferLink, customerEmail,
+      ticketLink, brief, transferLink, customerEmail, submissionTitle,
       storyDates, postDate, datesPublication,
       amount, amountHT, billingName, billingAddress, billingZip, billingCity,
     } = await req.json();
@@ -73,6 +73,7 @@ export async function POST(req: NextRequest) {
         brief: (brief || "").slice(0, 500),
         transferLink: transferLink || "",
         customerEmail,
+        submissionTitle: submissionTitle || "",
         storyDates: JSON.stringify(storyDates || []),
         postDate: postDate || "",
         datesPublication: JSON.stringify(sortedDays),

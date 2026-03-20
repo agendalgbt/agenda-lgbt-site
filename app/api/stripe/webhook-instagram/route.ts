@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
         brief: meta.brief || "",
         transferLink: meta.transferLink || "",
         customerEmail: meta.customerEmail || session.customer_details?.email || "",
+        submission_title: meta.submissionTitle || "",
         storyDates,
         postDate,
         datesPublication: JSON.parse(meta.datesPublication || "[]"),

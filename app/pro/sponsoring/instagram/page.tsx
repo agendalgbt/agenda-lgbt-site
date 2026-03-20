@@ -3,11 +3,16 @@
 import { useAuth } from "../../context/AuthContext";
 import AuthGuard from "../../components/AuthGuard";
 import ProHeader from "../../components/ProHeader";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function SponsoringInstagramPage() {
+function SponsoringInstagramInner() {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const submissionTitle = searchParams.get("submissionTitle") || "";
   const params = new URLSearchParams();
   if (user?.email) params.set("userEmail", user.email);
+  if (submissionTitle) params.set("submissionTitle", submissionTitle);
   const src = `/_sp/instagram.html${params.toString() ? "?" + params.toString() : ""}`;
 
   return (
@@ -21,5 +26,13 @@ export default function SponsoringInstagramPage() {
         />
       </div>
     </AuthGuard>
+  );
+}
+
+export default function SponsoringInstagramPage() {
+  return (
+    <Suspense>
+      <SponsoringInstagramInner />
+    </Suspense>
   );
 }

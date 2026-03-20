@@ -474,8 +474,10 @@
   document.getElementById('event-date').min = new Date().toISOString().split('T')[0];
 
   // Pré-remplissage email depuis le dashboard
+  let _submissionTitle = '';
   const _urlParams = new URLSearchParams(window.location.search);
   const _presetEmail = _urlParams.get('userEmail');
+  _submissionTitle = _urlParams.get('submissionTitle') || '';
   if (_presetEmail) {
     const emailField = document.getElementById('customer-email');
     if (emailField) emailField.value = _presetEmail;
@@ -764,6 +766,7 @@
           billingAddress:   document.getElementById('billing-address').value.trim(),
           billingZip:       document.getElementById('billing-zip').value.trim(),
           billingCity:      document.getElementById('billing-city').value.trim(),
+          submissionTitle:   _submissionTitle,
         })
       });
       const data = await resp.json();
