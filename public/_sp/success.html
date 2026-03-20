@@ -109,7 +109,7 @@
       if (h) h.style.display = 'none';
       // Match dashboard background
       var style = document.createElement('style');
-      style.textContent = 'body { background: #0a0a0f !important; } body::before { display: none !important; }';
+      style.textContent = 'body { background: #0a0a0f !important; } body::before { display: none !important; } ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #0a0a0f; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); } * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) #0a0a0f; }';
       document.head.appendChild(style);
     });
   }
