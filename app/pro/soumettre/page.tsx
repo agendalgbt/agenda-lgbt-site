@@ -198,7 +198,7 @@ export default function SoumettreEvenementPage() {
                     <span className="text-green-400">✓</span> Publié sur l'application
                   </div>
                   <div className="flex items-center gap-2 text-xs text-white/60">
-                    <span className="text-pink-400">✓</span> Publié sur <span className="text-white">@agenda_lgbt</span>
+                    <span className="text-green-400">✓</span> Publié sur <span className="text-white">@agenda_lgbt</span>
                   </div>
                 </div>
               </button>
@@ -218,7 +218,7 @@ export default function SoumettreEvenementPage() {
                     <span className="text-green-400">✓</span> Publié sur l'application
                   </div>
                   <div className="flex items-center gap-2 text-xs text-white/30">
-                    <span className="text-white/20">✗</span> Non publié sur Instagram
+                    <span className="text-pink-400">✗</span> Non publié sur Instagram
                   </div>
                 </div>
               </button>
