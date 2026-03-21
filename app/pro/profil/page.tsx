@@ -7,6 +7,7 @@ import { db, auth } from "@/lib/firebase";
 import { useAuth } from "../context/AuthContext";
 import AuthGuard from "../components/AuthGuard";
 import ProHeader from "../components/ProHeader";
+import ProFooter from "../components/ProFooter";
 
 export default function ProfilPage() {
   const { user, organizer } = useAuth();
@@ -231,6 +232,7 @@ export default function ProfilPage() {
             </button>
           </form>
         </main>
+      <ProFooter />
       </div>
     </AuthGuard>
   );

@@ -7,6 +7,7 @@ import { db, storage } from "@/lib/firebase";
 import { useAuth } from "../context/AuthContext";
 import AuthGuard from "../components/AuthGuard";
 import ProHeader from "../components/ProHeader";
+import ProFooter from "../components/ProFooter";
 import { useRouter } from "next/navigation";
 
 type Platform = "clubbing" | "other" | null;
@@ -514,6 +515,7 @@ export default function SoumettreEvenementPage() {
             </button>
           </form>
         </main>
+      <ProFooter />
       </div>
     </AuthGuard>
   );

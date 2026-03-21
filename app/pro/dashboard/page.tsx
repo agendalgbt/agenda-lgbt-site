@@ -7,6 +7,7 @@ import { db } from "@/lib/firebase";
 import { useAuth } from "../context/AuthContext";
 import AuthGuard from "../components/AuthGuard";
 import ProHeader from "../components/ProHeader";
+import ProFooter from "../components/ProFooter";
 
 type Submission = {
   id: string;
@@ -463,6 +464,7 @@ export default function DashboardPage() {
 
           </div>
         </main>
+      <ProFooter />
       </div>
     </AuthGuard>
   );
