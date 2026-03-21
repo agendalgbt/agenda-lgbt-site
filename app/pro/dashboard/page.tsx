@@ -175,8 +175,11 @@ export default function DashboardPage() {
             </a>
           </div>
 
-          {/* Liste des soumissions */}
-          <div>
+          {/* Soumissions + Sponsorisations côte à côte */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+
+            {/* Colonne gauche — Mes soumissions */}
+            <div>
             <h2 className="text-white font-semibold mb-4">Mes soumissions</h2>
 
             {loading ? (
@@ -391,6 +394,73 @@ export default function DashboardPage() {
                 })}
               </div>
             )}
+            </div>
+
+            {/* Colonne droite — Mes sponsorisations */}
+            <div>
+              <h2 className="text-white font-semibold mb-4">Mes sponsorisations</h2>
+              {loading ? (
+                <div className="flex justify-center py-16">
+                  <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : sponsorships.length === 0 && igSponsorships.length === 0 ? (
+                <div className="glass rounded-2xl p-12 text-center">
+                  <div className="text-4xl mb-4">⚡</div>
+                  <p className="text-white/40 text-sm">Aucune sponsorisation pour le moment.</p>
+                  <a href="/pro/sponsoring" className="inline-block mt-6 text-violet-400 hover:text-violet-300 text-sm transition-colors">
+                    Découvrir le sponsoring →
+                  </a>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  {sponsorships.map((sp) => {
+                    const futureDays = sp.days?.filter((d) => d >= today).sort() || [];
+                    const isActive = futureDays.length > 0;
+                    const allDays = [...(sp.days || [])].sort();
+                    return (
+                      <div key={sp.id} className="glass rounded-2xl px-5 py-4 border border-white/5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-white font-medium text-sm truncate">📱 {sp.eventName}</p>
+                            {allDays.length > 0 && (
+                              <p className="text-white/40 text-xs mt-1">
+                                Du {new Date(allDays[0]).toLocaleDateString("fr-FR")} au {new Date(allDays[allDays.length - 1]).toLocaleDateString("fr-FR")}
+                                {" · "}{allDays.length} jour{allDays.length > 1 ? "s" : ""}
+                              </p>
+                            )}
+                          </div>
+                          <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full border ${isActive ? "border-amber-500/40 bg-amber-500/10 text-amber-300" : "border-white/10 bg-white/5 text-white/40"}`}>
+                            {isActive ? "Actif" : "Terminé"}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {igSponsorships.map((ig) => {
+                    const dates = [...(ig.storyDates || [])].sort();
+                    const lastDate = ig.postDate || dates[dates.length - 1];
+                    const isActive = lastDate ? lastDate >= today : false;
+                    return (
+                      <div key={ig.id} className="glass rounded-2xl px-5 py-4 border border-white/5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-white font-medium text-sm truncate">📸 {ig.eventName}</p>
+                            <p className="text-white/40 text-xs mt-1">
+                              {ig.packName}
+                              {dates.length > 0 && ` · ${ig.storyDates?.length || 0} story${(ig.storyDates?.length || 0) > 1 ? "s" : ""}${ig.postDate ? " · 1 post" : ""}`}
+                            </p>
+                          </div>
+                          <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full border ${isActive ? "border-pink-500/40 bg-pink-500/10 text-pink-300" : "border-white/10 bg-white/5 text-white/40"}`}>
+                            {isActive ? "Actif" : "Terminé"}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
           </div>
         </main>
       </div>
