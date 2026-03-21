@@ -38,6 +38,7 @@ agenda-lgbt-site/
 │   │   ├── page.tsx            # Landing page pro
 │   │   ├── inscription/page.tsx
 │   │   ├── connexion/page.tsx
+│   │   ├── auto-login/page.tsx # Connexion automatique via magic link
 │   │   ├── dashboard/page.tsx
 │   │   ├── soumettre/page.tsx
 │   │   ├── profil/page.tsx
@@ -50,9 +51,13 @@ agenda-lgbt-site/
 │   │   ├── context/AuthContext.tsx
 │   │   └── components/
 │   │       ├── AuthGuard.tsx
-│   │       └── ProHeader.tsx
+│   │       ├── ProHeader.tsx
+│   │       └── ProFooter.tsx
 │   └── api/
 │       ├── send-email/route.ts
+│       ├── pro/
+│       │   ├── sponsorships/route.ts  # Sponsorisations orga (Firebase Admin)
+│       │   └── magic-link/route.ts    # Génération/vérification magic tokens
 │       ├── audience/route.ts              # Alias → stripe/audience
 │       ├── create-checkout/route.ts       # Alias → stripe/create-checkout
 │       ├── create-checkout-instagram/route.ts
@@ -105,11 +110,13 @@ Link-in-bio connectée à Firestore (`links`). Liens gérés dynamiquement depui
 **Fonctionnalités :**
 - Formulaires adaptatifs par catégorie d'événement
 - Upload d'image via Firebase Storage
-- Emails automatiques via Resend (bienvenue, soumission, validation, refus)
+- Emails automatiques via Resend (bienvenue, soumission reçue, décision neutre + magic link auto-login)
 - Validation/refus depuis le dashboard Streamlit
 - Badges sponsoring sur les events validés (⚡ App / ⚡ Instagram)
 - Pills CTA "📱 App" / "📸 Instagram" sur les events validés pour accéder au sponsoring avec event pré-sélectionné
 - Compteur "Sponsorisations actives" dans les stats du dashboard
+- Section "Mes sponsorisations" côte à côte avec "Mes soumissions" (toutes sponsos app + Instagram, statut Actif/Terminé)
+- Magic link auto-login dans les emails de décision (validé/refusé) — connexion directe sans mot de passe, token usage unique 7 jours
 
 #### Collections Firestore :
 - `organizers` — profils organisateurs
@@ -120,6 +127,7 @@ Link-in-bio connectée à Firestore (`links`). Liens gérés dynamiquement depui
 - `instagram_booked_days` — dates réservées Instagram
 - `links` — liens link-in-bio
 - `users` — utilisateurs app mobile (lecture pour calcul audience)
+- `magic_tokens` — tokens de connexion automatique (UUID, email, expires_at, used)
 
 ---
 
@@ -155,6 +163,8 @@ Quand un organisateur clique sur "📱 App" ou "📸 Instagram" depuis le dashbo
 
 ### API serveur sponsoring
 - `/api/pro/sponsorships?email=xxx` — récupère les sponsorisations de l'orga via Firebase Admin (contourne les règles Firestore client)
+- `/api/pro/magic-link` (POST) — génère un token unique (UUID, expire 7j) stocké dans `magic_tokens`
+- `/api/pro/magic-link` (GET) — vérifie le token, génère un Firebase Custom Token, connecte l'orga
 
 **Règles Firestore requises :**
 ```
@@ -186,6 +196,8 @@ Tourne quotidiennement à 05:00 UTC. Parcourt les événements avec `sponsored_d
 | `STRIPE_WEBHOOK_SECRET` | Signature webhook app |
 | `STRIPE_WEBHOOK_SECRET_INSTAGRAM` | Signature webhook Instagram |
 | `NEXT_PUBLIC_BASE_URL` | `https://pro.agendalgbt.com` |
+
+> Les clés Firebase publiques (`NEXT_PUBLIC_FIREBASE_*`) sont également requises pour le client Firebase.
 
 ---
 
