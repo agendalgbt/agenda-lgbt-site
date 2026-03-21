@@ -172,6 +172,20 @@
       .cards { grid-template-columns: 1fr; }
       .hero { padding: 48px 24px 40px; }
     }
+
+    .rainbow-animated {
+      background: linear-gradient(90deg, #E53E3E, #ED8936, #ECC94B, #48BB78, #4299E1, #9F7AEA, #E53E3E);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: rainbowMove 4s ease infinite;
+    }
+    @keyframes rainbowMove {
+      0% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+      100% { background-position: 0% center; }
+    }
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
 <script>
@@ -197,7 +211,7 @@
 </header>
 
 <div class="hero">
-  <h1>Boostez votre<br><span style="background:linear-gradient(to right,#E53E3E,#ED8936,#ECC94B,#48BB78,#4299E1,#9F7AEA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">événement</span></h1>
+  <h1>Boostez votre<br><span class="rainbow-animated">événement</span></h1>
   <p>Choisissez votre canal de sponsorisation et touchez directement la communauté LGBTQIA+.</p>
 
   <div class="cards">

@@ -224,6 +224,7 @@ export default function SoumettreEvenementPage() {
               </button>
             </div>
           </main>
+      <ProFooter />
         </div>
       </AuthGuard>
     );
@@ -261,6 +262,7 @@ export default function SoumettreEvenementPage() {
               ))}
             </div>
           </main>
+      <ProFooter />
         </div>
       </AuthGuard>
     );
