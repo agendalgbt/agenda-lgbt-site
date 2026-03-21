@@ -61,11 +61,11 @@ export default function ProLandingPage() {
             <span className="font-bold text-sm">
               <span className="rainbow-text">Agenda</span>
               <span className="text-white ml-1">LGBT</span>
-              <span className="text-white/40 ml-2 font-normal">Pro</span>
+              <span className="hidden sm:inline text-white/40 ml-2 font-normal">Pro</span>
             </span>
           </a>
           <div className="flex items-center gap-4">
-            <a href="/pro/connexion" className="text-white/50 hover:text-white text-sm transition-colors">
+            <a href="/pro/connexion" className="hidden sm:inline text-white/50 hover:text-white text-sm transition-colors">
               Connexion
             </a>
             <a
