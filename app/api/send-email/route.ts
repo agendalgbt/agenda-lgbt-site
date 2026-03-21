@@ -1,5 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { adminDb } from "@/lib/firebase-admin";
+
+
+async function generateMagicLink(email: string): Promise<string> {
+  try {
+    const token = crypto.randomUUID();
+    await adminDb.collection("magic_tokens").add({
+      email,
+      token,
+      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      used: false,
+    });
+    return `https://pro.agendalgbt.com/pro/auto-login?t=${token}`;
+  } catch {
+    return "https://pro.agendalgbt.com/pro/connexion";
+  }
+}
 
 export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
@@ -101,18 +118,21 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({ success: true });
     } else if (type === "approved") {
-      subject = `🎉 Votre événement "${titre}" est en ligne !`;
+      const magicLink = await generateMagicLink(to);
+      subject = `Une décision a été prise concernant votre événement "${titre}"`;
       html = `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0a0a0f; color: white; padding: 40px; border-radius: 16px;">
-          <h1 style="color: #4ade80; margin-bottom: 8px;">Événement validé 🎉</h1>
+          <h1 style="background: linear-gradient(to right, #8b5cf6, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;">
+            Votre soumission a été examinée
+          </h1>
           <p style="color: rgba(255,255,255,0.6); margin-bottom: 24px;">
             Bonjour ${contact_nom},<br/><br/>
-            Bonne nouvelle ! Votre événement <strong style="color: white;">"${titre}"</strong> a été validé
-            et est maintenant visible sur l'application Agenda LGBT.
+            Notre équipe vient d'examiner votre soumission <strong style="color: white;">"${titre}"</strong>.<br/><br/>
+            Connectez-vous à votre espace pour découvrir le résultat et les actions disponibles.
           </p>
-          <a href="https://agendalgbt.com/pro/dashboard"
-             style="background: linear-gradient(to right, #4ade80, #3b82f6); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block;">
-            Voir mon tableau de bord
+          <a href="${magicLink}"
+             style="background: linear-gradient(to right, #8b5cf6, #3b82f6); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block;">
+            → Accéder à mon espace
           </a>
           <p style="color: rgba(255,255,255,0.3); margin-top: 40px; font-size: 12px;">
             Agenda LGBT — <a href="https://agendalgbt.com" style="color: rgba(255,255,255,0.3);">agendalgbt.com</a>
@@ -120,26 +140,21 @@ export async function POST(req: NextRequest) {
         </div>
       `;
     } else if (type === "rejected") {
-      const { raison } = body;
-      subject = `Votre événement "${titre}" nécessite des modifications`;
+      const magicLink = await generateMagicLink(to);
+      subject = `Une décision a été prise concernant votre événement "${titre}"`;
       html = `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0a0a0f; color: white; padding: 40px; border-radius: 16px;">
-          <h1 style="color: white; margin-bottom: 8px;">Modifications requises</h1>
-          <p style="color: rgba(255,255,255,0.6); margin-bottom: 16px;">
+          <h1 style="background: linear-gradient(to right, #8b5cf6, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;">
+            Votre soumission a été examinée
+          </h1>
+          <p style="color: rgba(255,255,255,0.6); margin-bottom: 24px;">
             Bonjour ${contact_nom},<br/><br/>
-            Votre événement <strong style="color: white;">"${titre}"</strong> n'a pas pu être validé en l'état.
+            Notre équipe vient d'examiner votre soumission <strong style="color: white;">"${titre}"</strong>.<br/><br/>
+            Connectez-vous à votre espace pour découvrir le résultat et les actions disponibles.
           </p>
-          ${raison ? `
-          <div style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-            <p style="color: rgba(255,255,255,0.7); margin: 0; font-size: 14px;"><strong>Motif :</strong> ${raison}</p>
-          </div>
-          ` : ""}
-          <p style="color: rgba(255,255,255,0.6); margin-bottom: 32px;">
-            Vous pouvez soumettre une nouvelle version depuis votre espace pro.
-          </p>
-          <a href="https://agendalgbt.com/pro/soumettre"
+          <a href="${magicLink}"
              style="background: linear-gradient(to right, #8b5cf6, #3b82f6); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block;">
-            Soumettre à nouveau
+            → Accéder à mon espace
           </a>
           <p style="color: rgba(255,255,255,0.3); margin-top: 40px; font-size: 12px;">
             Agenda LGBT — <a href="https://agendalgbt.com" style="color: rgba(255,255,255,0.3);">agendalgbt.com</a>

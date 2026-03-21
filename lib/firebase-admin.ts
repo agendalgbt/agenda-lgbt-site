@@ -23,3 +23,16 @@ export const adminDb = new Proxy({} as admin.firestore.Firestore, {
 });
 
 export default admin;
+
+export function getAdminAuth() {
+  getAdminApp();
+  return admin.auth();
+}
+
+export const adminAuth = new Proxy({} as admin.auth.Auth, {
+  get(_target, prop) {
+    const auth = getAdminAuth();
+    const value = (auth as any)[prop];
+    return typeof value === "function" ? value.bind(auth) : value;
+  },
+});
