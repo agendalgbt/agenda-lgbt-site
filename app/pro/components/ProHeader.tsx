@@ -37,7 +37,7 @@ export default function ProHeader() {
           <span className="font-bold text-sm">
             <span className="rainbow-text">Agenda</span>
             <span className="text-white ml-1">LGBT</span>
-            <span className="text-white/40 ml-2 font-normal">Pro</span>
+            <span className="hidden sm:inline text-white/40 ml-2 font-normal">Pro</span>
           </span>
         </a>
 

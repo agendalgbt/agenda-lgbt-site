@@ -148,7 +148,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-4 gap-4 mb-10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
             {[
               { label: "Événements soumis", value: stats.total },
               { label: "Validés", value: stats.valides },
@@ -222,7 +222,7 @@ export default function DashboardPage() {
                               : ""}
                           </p>
                         </button>
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex flex-wrap items-center gap-2 shrink-0">
                           {/* Badges sponsoring actif */}
                           {appSponsored && (
                             <span className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-300">

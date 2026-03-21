@@ -117,19 +117,7 @@ export default function ProLandingPage() {
           </a>
         </div>
 
-        {/* Stats */}
-        <div className="mt-16 flex flex-wrap justify-center gap-12">
-          {[
-            { value: "+500", label: "événements publiés" },
-            { value: "2 pays", label: "France & Belgique" },
-            { value: "100%", label: "gratuit" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-2xl font-bold rainbow-text">{stat.value}</div>
-              <div className="text-white/40 text-sm mt-1">{stat.label}</div>
-            </div>
-          ))}
-        </div>
+
       </section>
 
       {/* Features */}
